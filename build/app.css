@@ -120,8 +120,13 @@ textarea.input{min-height:88px;resize:vertical}
 .row-state.done{color:var(--dimmer)}
 .row.is-now,.row.is-now:nth-of-type(even){background:color-mix(in srgb,var(--gold) 16%,var(--white));box-shadow:inset 3px 0 0 var(--red)}
 .row.is-now .row-num{opacity:1;font-weight:500}
-.sec-title{display:flex;align-items:center;gap:12px;font:600 15px/1.38 var(--font-h);letter-spacing:.1em;text-transform:uppercase;color:var(--gold-ink);padding:var(--s-6) var(--s-5) var(--s-3)}
-.sec-title::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent)}
+/* Centred and flanked by rules: a heading hard against the left edge is easy to
+   skim past on a wide screen, and gives the eye nothing to land on. */
+.sec-title{display:flex;align-items:center;justify-content:center;gap:12px;text-align:center;
+  font:600 15px/1.38 var(--font-h);letter-spacing:.1em;text-transform:uppercase;color:var(--gold-ink);padding:var(--s-6) var(--s-5) var(--s-3)}
+.sec-title::before,.sec-title::after{content:"";flex:1;height:1px}
+.sec-title::before{background:linear-gradient(90deg,transparent,var(--gold))}
+.sec-title::after{background:linear-gradient(90deg,var(--gold),transparent)}
 
 .table{width:100%;border-collapse:collapse;font-size:16.5px}
 .table thead{background:color-mix(in srgb,var(--gold) 16%,var(--white))}
@@ -562,10 +567,6 @@ select.input{appearance:none;-webkit-appearance:none;cursor:pointer;padding-righ
 
 /* The credibility band is a centred module, so its heading centres too and is
    flanked by rules on both sides rather than trailing one to the right. */
-.honours-block .sec-title{justify-content:center;text-align:center}
-.honours-block .sec-title::before{content:"";flex:1;height:1px;
-  background:linear-gradient(90deg,transparent,var(--gold))}
-
 /* ── motion ──────────────────────────────────────────── */
 /* Paced like a manuscript being read: unhurried, nothing springs or bounces.
    The page turns, gold catches the light, and numerals settle onto the leaf. */
@@ -606,8 +607,7 @@ select.input{appearance:none;-webkit-appearance:none;cursor:pointer;padding-righ
 /* Section rules unroll the same way. */
 .nav-fwd .sec-title::after,.nav-back .sec-title::after,.nav-tab .sec-title::after{
   transform-origin:left center;animation:hp-rule .7s var(--ease) both;animation-delay:.2s}
-.nav-fwd .honours-block .sec-title::before,.nav-back .honours-block .sec-title::before,
-.nav-tab .honours-block .sec-title::before{
+.nav-fwd .sec-title::before,.nav-back .sec-title::before,.nav-tab .sec-title::before{
   transform-origin:right center;animation:hp-rule .7s var(--ease) both;animation-delay:.2s}
 
 /* Candlelight passing over gold leaf — one slow sweep as a view arrives. */
