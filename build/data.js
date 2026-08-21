@@ -14,14 +14,26 @@ const STATS = [
   { n:'๓',   k:'คอร์สที่เปิดสอน' }
 ];
 
-/* Press and honours, from the ประวัติอาจารย์ page. Real third-party recognition
-   does more for trust than a round number nobody can check. */
+/* The site separates press rankings from awards under two headings, so the app
+   keeps them apart too rather than flattening both into one list. */
 const HONOURS = [
-  { t:'๑ ใน ๑๐ "หมอดูมีชื่อเสียง"', by:'ไทยรัฐ' },
-  { t:'๑ ใน ๒๕ "ทำเนียบหมอดู"',     by:'มติชน' },
-  { t:'๑ ใน ๖ "หมอดูมีชื่อเสียง"',   by:'นิตยสารเปรียว' },
-  { t:'นักเขียนอาวุโสดีเด่น ๒๕๕๙ · รางวัล "พระองค์วรรณฯ"', by:'สมาคมนักเขียนแห่งประเทศไทย' }
+  { group:'ตำแหน่งเกียรติยศ', items:[
+    { t:'๑ ใน ๑๐ "หมอดูมีชื่อเสียง"', by:'ไทยรัฐ' },
+    { t:'๑ ใน ๒๕ "ทำเนียบหมอดู"',     by:'มติชน' },
+    { t:'๑ ใน ๖ "หมอดูมีชื่อเสียง"',   by:'นิตยสารเปรียว' }
+  ]},
+  { group:'รางวัลเกียรติยศ', items:[
+    { t:'"นักเขียนอาวุโสดีเด่น" ประจำปี ๒๕๕๙ · รับรางวัล "พระองค์วรรณฯ"',
+      by:'สมาคมนักเขียนแห่งประเทศไทย · ๑๖ สิงหาคม ๒๕๕๙' }
+  ]}
 ];
+
+/* Section intros, worded as the site words them. */
+const INTRO = {
+  courses:'เรียนรู้โหราศาสตร์ไทย ตั้งแต่พื้นฐาน ขั้นสูง และการวางฤกษ์',
+  booking:'พร้อมให้คำปรึกษาด้านโหราศาสตร์ไทย ด้วยความใส่ใจและประสบการณ์มากว่า ๔๐ ปี',
+  successor:'สืบสานโหราศาสตร์ไทย ส่งต่อความรู้อันล้ำค่า สู่คนรุ่นใหม่'
+};
 
 /* Life dates and milestones as published. */
 const TEACHER = {
@@ -185,4 +197,4 @@ const SLOTS = [
 const GOOD_DAYS = [3,7,12,15,20,22,23,28];
 const AVOID_DAYS = [5,13,19,26];
 
-window.HP_DATA = { RASI, SUCCESSOR, MEDIA, HONOURS, TEACHER, CONTACT, STATS, TESTIMONIALS, MONTHS, DAY_COLOR, PROVINCES, ZODIAC, ZODIAC_ART, PLACE, LESSONS, PLANETS, COURSES, ARTICLES, VIDEOS, SERVICES, SLOTS, GOOD_DAYS, AVOID_DAYS };
+window.HP_DATA = { RASI, INTRO, SUCCESSOR, MEDIA, HONOURS, TEACHER, CONTACT, STATS, TESTIMONIALS, MONTHS, DAY_COLOR, PROVINCES, ZODIAC, ZODIAC_ART, PLACE, LESSONS, PLANETS, COURSES, ARTICLES, VIDEOS, SERVICES, SLOTS, GOOD_DAYS, AVOID_DAYS };

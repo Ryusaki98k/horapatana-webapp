@@ -2,7 +2,8 @@
 (function () {
   var D = window.HP_DATA;
   var CONTACT = D.CONTACT, STATS = D.STATS, TESTIMONIALS = D.TESTIMONIALS,
-      HONOURS = D.HONOURS, TEACHER = D.TEACHER, SUCCESSOR = D.SUCCESSOR, MEDIA = D.MEDIA;
+      HONOURS = D.HONOURS, TEACHER = D.TEACHER, SUCCESSOR = D.SUCCESSOR, MEDIA = D.MEDIA,
+      INTRO = D.INTRO;
   var MONTHS = D.MONTHS, DAY_COLOR = D.DAY_COLOR, PROVINCES = D.PROVINCES,
       ZODIAC = D.ZODIAC, ART = D.ZODIAC_ART || {};
   var RASI = D.RASI, PLACE = D.PLACE, LESSONS = D.LESSONS, PLANETS = D.PLANETS,
@@ -250,11 +251,13 @@
     /* Heading and cards share one wrapper so they cannot drift to different
        widths — on desktop the block is centred as a unit. */
     return '<section class="honours-block">' +
-      '<div class="sec-title">ได้รับการยอมรับ</div>' +
-      '<ul class="honours">' + HONOURS.map(function (h) {
-        return '<li><span class="hon-t">' + esc(h.t) + '</span>' +
-               '<span class="hon-by">' + esc(h.by) + '</span></li>';
-      }).join('') + '</ul></section>';
+      HONOURS.map(function (g) {
+        return '<div class="sec-title">' + esc(g.group) + '</div>' +
+          '<ul class="honours">' + g.items.map(function (h) {
+            return '<li><span class="hon-t">' + esc(h.t) + '</span>' +
+                   '<span class="hon-by">' + esc(h.by) + '</span></li>';
+          }).join('') + '</ul>';
+      }).join('') + '</section>';
   }
 
   /* Credibility before persuasion — unverified figures are omitted rather than
@@ -500,8 +503,24 @@
       '<div class="stack"><button class="btn btn-primary btn-block" data-act="go" data-screen="booking">ขอฤกษ์เฉพาะของคุณ</button></div>';
   };
 
+  /* The contact block the site closes on, QR included. */
+  function contactChannels() {
+    return '<div class="sec-title">ช่องทางติดต่อ</div>' +
+      '<div class="channels">' +
+      '<a class="channel" href="tel:' + esc(CONTACT.tel.replace(/\s/g, '')) + '">' +
+      '<span class="ch-k">เบอร์ติดต่อ</span><span class="ch-v">' + esc(CONTACT.tel) + '</span></a>' +
+      '<a class="channel" href="https://line.me/R/ti/p/~' + esc(CONTACT.lineId) + '" target="_blank" rel="noopener">' +
+      '<span class="ch-k">Line ID</span><span class="ch-v">' + esc(CONTACT.lineId) + '</span></a>' +
+      '</div>' +
+      '<figure class="qr"><img src="' + esc(MEDIA.lineQr) + '" alt="QR code เพิ่มเพื่อนทางไลน์" ' +
+      'width="520" height="520" loading="lazy">' +
+      '<figcaption>สแกน QR code เพิ่มเพื่อน Line</figcaption></figure>';
+  }
+
   V.courses = function () {
-    return COURSES.map(function (c) {
+    return '<p class="muted" style="padding:var(--s-5) var(--s-5) 0;text-align:center">' +
+      esc(INTRO.courses) + '</p>' +
+      COURSES.map(function (c) {
       return '<div style="padding:18px 16px;border-bottom:1px solid var(--gold-hair)">' +
         '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">' +
         '<h3 style="font-size:19px">' + esc(c.t) + '</h3><div class="num" style="font-size:17px">' + esc(c.price) + '</div></div>' +
@@ -521,7 +540,10 @@
         '<p class="muted" style="margin:14px 0 0;font-size:13px">ทีมงานจะติดต่อยืนยันทางไลน์ภายใน ๑ วันทำการ</p>' +
         '<button class="btn btn-secondary btn-block" style="margin-top:12px" data-act="rebook">จองรายการอื่น</button></div>';
     }
-    return '<div class="block"><div class="block-title">เลือกบริการ</div><div class="pick-list">' +
+    return '<p class="muted" style="padding:var(--s-5) var(--s-5) 0;text-align:center">' +
+      esc(INTRO.booking) + '</p>' +
+      '<div class="sec-title">บริการของเรา</div>' +
+      '<div class="block"><div class="block-title">เลือกบริการ</div><div class="pick-list">' +
       SERVICES.map(function (s) {
         return '<div class="pick" role="button" aria-pressed="' + (b.svc === s.t) + '" data-act="svc" data-t="' + esc(s.t) + '">' +
           '<div><div class="pick-title">' + esc(s.t) + '</div><div class="pick-sub">' + esc(s.d) + '</div></div>' +
@@ -536,7 +558,8 @@
       '<label class="field" style="margin-top:10px"><span>คำถามที่อยากปรึกษา</span><textarea class="input" data-bind="booking.note">' + esc(b.note) + '</textarea></label>' +
       '<button class="btn btn-primary btn-block" style="margin-top:12px" data-act="confirm"' + (b.slot ? '' : ' disabled') + '>' +
       (b.slot ? 'ยืนยันการจอง' : 'เลือกเวลาก่อน') + '</button>' +
-      '<div class="muted" style="font-size:11px;margin-top:8px">ค่าบริการชำระหลังยืนยันฤกษ์ · ยกเลิกฟรีก่อน ๒๔ ชม.</div></div>';
+      '<div class="muted" style="font-size:11px;margin-top:8px">ค่าบริการชำระหลังยืนยันฤกษ์ · ยกเลิกฟรีก่อน ๒๔ ชม.</div></div>' +
+      contactChannels();
   };
 
   V.articles = function () {
@@ -573,15 +596,18 @@
       '<h2 style="font-size:27px">พัฒนา พัฒนศิริ</h2>' +
       '<div class="row-sub">โหราจารย์ · ดูดวง ดูฤกษ์ ฮวงจุ้ย และพิธีมงคล</div>' +
       '<p style="margin:12px 0 0;font-size:14px;line-height:1.75">ด้วยประสบการณ์กว่า ๔๐ ปี ท่านอุทิศตนถ่ายทอดวิชาผ่านการสอนและงานเขียน หล่อหลอมความรู้และประสบการณ์สู่ลูกศิษย์และผู้สนใจ ตลอดจนวาระสุดท้าย</p></div>' +
+      '<div class="sec-title">ประสบการณ์และผลงาน</div>' +
       TEACHER.timeline.map(function (m) {
         return '<div class="row"><div class="row-main"><div class="row-title" style="font-size:15px">' +
           esc(m.k) + '</div><div class="row-sub">' + esc(m.t) + '</div></div></div>';
       }).join('') +
       /* The daughter who carries the practice on — published on เกี่ยวกับเรา. */
-      '<div class="sec-title">ผู้สืบทอด</div>' +
+      '<div class="sec-title">เกี่ยวกับ อาจารย์ฉัตร</div>' +
+      '<p class="muted" style="padding:0 var(--s-5);text-align:center">' + esc(INTRO.successor) + '</p>' +
       '<div style="padding:0 var(--s-5) var(--s-4)"><div class="row-title">' + esc(SUCCESSOR.name) + '</div>' +
       '<div class="row-sub">' + esc(SUCCESSOR.role) + '</div>' +
       '<p class="muted" style="margin:10px 0 0">' + esc(SUCCESSOR.bio) + '</p></div>' +
+      '<div class="sec-title">บทบาทและความถนัด</div>' +
       SUCCESSOR.points.map(function (m) {
         return '<div class="row"><div class="row-main"><div class="row-title" style="font-size:15px">' +
           esc(m.k) + '</div><div class="row-sub">' + esc(m.t) + '</div></div></div>';

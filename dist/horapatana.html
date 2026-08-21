@@ -576,6 +576,24 @@ select.input{appearance:none;-webkit-appearance:none;cursor:pointer;padding-righ
 
 /* The credibility band is a centred module, so its heading centres too and is
    flanked by rules on both sides rather than trailing one to the right. */
+/* ── contact channels ────────────────────────────────── */
+.channels{display:grid;gap:10px;padding:0 var(--s-5)}
+.channel{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  padding:14px 16px;background:var(--white);border:1px solid var(--gold-hair);
+  border-left:2px solid var(--gold);border-radius:var(--r-md);
+  text-decoration:none;transition:border-color .16s,background .16s}
+.channel:hover{border-color:var(--gold-deep);background:var(--gold-wash)}
+.ch-k{font:600 13px/1.38 var(--font-h);letter-spacing:.1em;text-transform:uppercase;color:var(--gold-ink)}
+.ch-v{font:500 17px/1.4 var(--font-h);color:var(--paper)}
+
+.qr{margin:var(--s-5) auto 0;max-width:220px;padding:0 var(--s-5) var(--s-6);text-align:center}
+.qr img{width:100%;height:auto;border:1px solid var(--gold-line);
+  border-top:2px solid var(--gold);border-radius:var(--r-md);background:var(--white)}
+.qr figcaption{margin-top:10px;font-size:14px;color:var(--dim)}
+
+@media (min-width:720px){ .channels{grid-template-columns:1fr 1fr} }
+@media (min-width:1024px){ .channels{max-width:620px;margin-inline:auto} }
+
 /* ── motion ──────────────────────────────────────────── */
 /* Paced like a manuscript being read: unhurried, nothing springs or bounces.
    The page turns, gold catches the light, and numerals settle onto the leaf. */
@@ -685,14 +703,26 @@ const STATS = [
   { n:'๓',   k:'คอร์สที่เปิดสอน' }
 ];
 
-/* Press and honours, from the ประวัติอาจารย์ page. Real third-party recognition
-   does more for trust than a round number nobody can check. */
+/* The site separates press rankings from awards under two headings, so the app
+   keeps them apart too rather than flattening both into one list. */
 const HONOURS = [
-  { t:'๑ ใน ๑๐ "หมอดูมีชื่อเสียง"', by:'ไทยรัฐ' },
-  { t:'๑ ใน ๒๕ "ทำเนียบหมอดู"',     by:'มติชน' },
-  { t:'๑ ใน ๖ "หมอดูมีชื่อเสียง"',   by:'นิตยสารเปรียว' },
-  { t:'นักเขียนอาวุโสดีเด่น ๒๕๕๙ · รางวัล "พระองค์วรรณฯ"', by:'สมาคมนักเขียนแห่งประเทศไทย' }
+  { group:'ตำแหน่งเกียรติยศ', items:[
+    { t:'๑ ใน ๑๐ "หมอดูมีชื่อเสียง"', by:'ไทยรัฐ' },
+    { t:'๑ ใน ๒๕ "ทำเนียบหมอดู"',     by:'มติชน' },
+    { t:'๑ ใน ๖ "หมอดูมีชื่อเสียง"',   by:'นิตยสารเปรียว' }
+  ]},
+  { group:'รางวัลเกียรติยศ', items:[
+    { t:'"นักเขียนอาวุโสดีเด่น" ประจำปี ๒๕๕๙ · รับรางวัล "พระองค์วรรณฯ"',
+      by:'สมาคมนักเขียนแห่งประเทศไทย · ๑๖ สิงหาคม ๒๕๕๙' }
+  ]}
 ];
+
+/* Section intros, worded as the site words them. */
+const INTRO = {
+  courses:'เรียนรู้โหราศาสตร์ไทย ตั้งแต่พื้นฐาน ขั้นสูง และการวางฤกษ์',
+  booking:'พร้อมให้คำปรึกษาด้านโหราศาสตร์ไทย ด้วยความใส่ใจและประสบการณ์มากว่า ๔๐ ปี',
+  successor:'สืบสานโหราศาสตร์ไทย ส่งต่อความรู้อันล้ำค่า สู่คนรุ่นใหม่'
+};
 
 /* Life dates and milestones as published. */
 const TEACHER = {
@@ -853,14 +883,15 @@ const SLOTS = [
 const GOOD_DAYS = [3,7,12,15,20,22,23,28];
 const AVOID_DAYS = [5,13,19,26];
 
-window.HP_DATA = { RASI, SUCCESSOR, MEDIA, HONOURS, TEACHER, CONTACT, STATS, TESTIMONIALS, MONTHS, DAY_COLOR, PROVINCES, ZODIAC, ZODIAC_ART, PLACE, LESSONS, PLANETS, COURSES, ARTICLES, VIDEOS, SERVICES, SLOTS, GOOD_DAYS, AVOID_DAYS };
+window.HP_DATA = { RASI, INTRO, SUCCESSOR, MEDIA, HONOURS, TEACHER, CONTACT, STATS, TESTIMONIALS, MONTHS, DAY_COLOR, PROVINCES, ZODIAC, ZODIAC_ART, PLACE, LESSONS, PLANETS, COURSES, ARTICLES, VIDEOS, SERVICES, SLOTS, GOOD_DAYS, AVOID_DAYS };
 </script>
 <script>
 /* Hora Patana webapp — vanilla JS. Data lives in data.js (window.HP_DATA). */
 (function () {
   var D = window.HP_DATA;
   var CONTACT = D.CONTACT, STATS = D.STATS, TESTIMONIALS = D.TESTIMONIALS,
-      HONOURS = D.HONOURS, TEACHER = D.TEACHER, SUCCESSOR = D.SUCCESSOR, MEDIA = D.MEDIA;
+      HONOURS = D.HONOURS, TEACHER = D.TEACHER, SUCCESSOR = D.SUCCESSOR, MEDIA = D.MEDIA,
+      INTRO = D.INTRO;
   var MONTHS = D.MONTHS, DAY_COLOR = D.DAY_COLOR, PROVINCES = D.PROVINCES,
       ZODIAC = D.ZODIAC, ART = D.ZODIAC_ART || {};
   var RASI = D.RASI, PLACE = D.PLACE, LESSONS = D.LESSONS, PLANETS = D.PLANETS,
@@ -1108,11 +1139,13 @@ window.HP_DATA = { RASI, SUCCESSOR, MEDIA, HONOURS, TEACHER, CONTACT, STATS, TES
     /* Heading and cards share one wrapper so they cannot drift to different
        widths — on desktop the block is centred as a unit. */
     return '<section class="honours-block">' +
-      '<div class="sec-title">ได้รับการยอมรับ</div>' +
-      '<ul class="honours">' + HONOURS.map(function (h) {
-        return '<li><span class="hon-t">' + esc(h.t) + '</span>' +
-               '<span class="hon-by">' + esc(h.by) + '</span></li>';
-      }).join('') + '</ul></section>';
+      HONOURS.map(function (g) {
+        return '<div class="sec-title">' + esc(g.group) + '</div>' +
+          '<ul class="honours">' + g.items.map(function (h) {
+            return '<li><span class="hon-t">' + esc(h.t) + '</span>' +
+                   '<span class="hon-by">' + esc(h.by) + '</span></li>';
+          }).join('') + '</ul>';
+      }).join('') + '</section>';
   }
 
   /* Credibility before persuasion — unverified figures are omitted rather than
@@ -1358,8 +1391,24 @@ window.HP_DATA = { RASI, SUCCESSOR, MEDIA, HONOURS, TEACHER, CONTACT, STATS, TES
       '<div class="stack"><button class="btn btn-primary btn-block" data-act="go" data-screen="booking">ขอฤกษ์เฉพาะของคุณ</button></div>';
   };
 
+  /* The contact block the site closes on, QR included. */
+  function contactChannels() {
+    return '<div class="sec-title">ช่องทางติดต่อ</div>' +
+      '<div class="channels">' +
+      '<a class="channel" href="tel:' + esc(CONTACT.tel.replace(/\s/g, '')) + '">' +
+      '<span class="ch-k">เบอร์ติดต่อ</span><span class="ch-v">' + esc(CONTACT.tel) + '</span></a>' +
+      '<a class="channel" href="https://line.me/R/ti/p/~' + esc(CONTACT.lineId) + '" target="_blank" rel="noopener">' +
+      '<span class="ch-k">Line ID</span><span class="ch-v">' + esc(CONTACT.lineId) + '</span></a>' +
+      '</div>' +
+      '<figure class="qr"><img src="' + esc(MEDIA.lineQr) + '" alt="QR code เพิ่มเพื่อนทางไลน์" ' +
+      'width="520" height="520" loading="lazy">' +
+      '<figcaption>สแกน QR code เพิ่มเพื่อน Line</figcaption></figure>';
+  }
+
   V.courses = function () {
-    return COURSES.map(function (c) {
+    return '<p class="muted" style="padding:var(--s-5) var(--s-5) 0;text-align:center">' +
+      esc(INTRO.courses) + '</p>' +
+      COURSES.map(function (c) {
       return '<div style="padding:18px 16px;border-bottom:1px solid var(--gold-hair)">' +
         '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">' +
         '<h3 style="font-size:19px">' + esc(c.t) + '</h3><div class="num" style="font-size:17px">' + esc(c.price) + '</div></div>' +
@@ -1379,7 +1428,10 @@ window.HP_DATA = { RASI, SUCCESSOR, MEDIA, HONOURS, TEACHER, CONTACT, STATS, TES
         '<p class="muted" style="margin:14px 0 0;font-size:13px">ทีมงานจะติดต่อยืนยันทางไลน์ภายใน ๑ วันทำการ</p>' +
         '<button class="btn btn-secondary btn-block" style="margin-top:12px" data-act="rebook">จองรายการอื่น</button></div>';
     }
-    return '<div class="block"><div class="block-title">เลือกบริการ</div><div class="pick-list">' +
+    return '<p class="muted" style="padding:var(--s-5) var(--s-5) 0;text-align:center">' +
+      esc(INTRO.booking) + '</p>' +
+      '<div class="sec-title">บริการของเรา</div>' +
+      '<div class="block"><div class="block-title">เลือกบริการ</div><div class="pick-list">' +
       SERVICES.map(function (s) {
         return '<div class="pick" role="button" aria-pressed="' + (b.svc === s.t) + '" data-act="svc" data-t="' + esc(s.t) + '">' +
           '<div><div class="pick-title">' + esc(s.t) + '</div><div class="pick-sub">' + esc(s.d) + '</div></div>' +
@@ -1394,7 +1446,8 @@ window.HP_DATA = { RASI, SUCCESSOR, MEDIA, HONOURS, TEACHER, CONTACT, STATS, TES
       '<label class="field" style="margin-top:10px"><span>คำถามที่อยากปรึกษา</span><textarea class="input" data-bind="booking.note">' + esc(b.note) + '</textarea></label>' +
       '<button class="btn btn-primary btn-block" style="margin-top:12px" data-act="confirm"' + (b.slot ? '' : ' disabled') + '>' +
       (b.slot ? 'ยืนยันการจอง' : 'เลือกเวลาก่อน') + '</button>' +
-      '<div class="muted" style="font-size:11px;margin-top:8px">ค่าบริการชำระหลังยืนยันฤกษ์ · ยกเลิกฟรีก่อน ๒๔ ชม.</div></div>';
+      '<div class="muted" style="font-size:11px;margin-top:8px">ค่าบริการชำระหลังยืนยันฤกษ์ · ยกเลิกฟรีก่อน ๒๔ ชม.</div></div>' +
+      contactChannels();
   };
 
   V.articles = function () {
@@ -1431,15 +1484,18 @@ window.HP_DATA = { RASI, SUCCESSOR, MEDIA, HONOURS, TEACHER, CONTACT, STATS, TES
       '<h2 style="font-size:27px">พัฒนา พัฒนศิริ</h2>' +
       '<div class="row-sub">โหราจารย์ · ดูดวง ดูฤกษ์ ฮวงจุ้ย และพิธีมงคล</div>' +
       '<p style="margin:12px 0 0;font-size:14px;line-height:1.75">ด้วยประสบการณ์กว่า ๔๐ ปี ท่านอุทิศตนถ่ายทอดวิชาผ่านการสอนและงานเขียน หล่อหลอมความรู้และประสบการณ์สู่ลูกศิษย์และผู้สนใจ ตลอดจนวาระสุดท้าย</p></div>' +
+      '<div class="sec-title">ประสบการณ์และผลงาน</div>' +
       TEACHER.timeline.map(function (m) {
         return '<div class="row"><div class="row-main"><div class="row-title" style="font-size:15px">' +
           esc(m.k) + '</div><div class="row-sub">' + esc(m.t) + '</div></div></div>';
       }).join('') +
       /* The daughter who carries the practice on — published on เกี่ยวกับเรา. */
-      '<div class="sec-title">ผู้สืบทอด</div>' +
+      '<div class="sec-title">เกี่ยวกับ อาจารย์ฉัตร</div>' +
+      '<p class="muted" style="padding:0 var(--s-5);text-align:center">' + esc(INTRO.successor) + '</p>' +
       '<div style="padding:0 var(--s-5) var(--s-4)"><div class="row-title">' + esc(SUCCESSOR.name) + '</div>' +
       '<div class="row-sub">' + esc(SUCCESSOR.role) + '</div>' +
       '<p class="muted" style="margin:10px 0 0">' + esc(SUCCESSOR.bio) + '</p></div>' +
+      '<div class="sec-title">บทบาทและความถนัด</div>' +
       SUCCESSOR.points.map(function (m) {
         return '<div class="row"><div class="row-main"><div class="row-title" style="font-size:15px">' +
           esc(m.k) + '</div><div class="row-sub">' + esc(m.t) + '</div></div></div>';

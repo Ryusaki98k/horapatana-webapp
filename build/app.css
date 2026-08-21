@@ -567,6 +567,24 @@ select.input{appearance:none;-webkit-appearance:none;cursor:pointer;padding-righ
 
 /* The credibility band is a centred module, so its heading centres too and is
    flanked by rules on both sides rather than trailing one to the right. */
+/* ── contact channels ────────────────────────────────── */
+.channels{display:grid;gap:10px;padding:0 var(--s-5)}
+.channel{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  padding:14px 16px;background:var(--white);border:1px solid var(--gold-hair);
+  border-left:2px solid var(--gold);border-radius:var(--r-md);
+  text-decoration:none;transition:border-color .16s,background .16s}
+.channel:hover{border-color:var(--gold-deep);background:var(--gold-wash)}
+.ch-k{font:600 13px/1.38 var(--font-h);letter-spacing:.1em;text-transform:uppercase;color:var(--gold-ink)}
+.ch-v{font:500 17px/1.4 var(--font-h);color:var(--paper)}
+
+.qr{margin:var(--s-5) auto 0;max-width:220px;padding:0 var(--s-5) var(--s-6);text-align:center}
+.qr img{width:100%;height:auto;border:1px solid var(--gold-line);
+  border-top:2px solid var(--gold);border-radius:var(--r-md);background:var(--white)}
+.qr figcaption{margin-top:10px;font-size:14px;color:var(--dim)}
+
+@media (min-width:720px){ .channels{grid-template-columns:1fr 1fr} }
+@media (min-width:1024px){ .channels{max-width:620px;margin-inline:auto} }
+
 /* ── motion ──────────────────────────────────────────── */
 /* Paced like a manuscript being read: unhurried, nothing springs or bounces.
    The page turns, gold catches the light, and numerals settle onto the leaf. */
