@@ -93,15 +93,18 @@
     if (screen === 'calendar' || screen === 'booking') return 'ruek';
     return 'me';
   }
+  /* Which way the next view should enter from. */
+  var navDir = 'tab';
+
   function go(screen) {
     if (S.screen !== screen) S.stack.push(S.screen);
-    S.screen = screen; S.tab = tabOf(screen); render();
+    navDir = 'fwd'; S.screen = screen; S.tab = tabOf(screen); render();
   }
   function back() {
-    S.screen = S.stack.pop() || 'home'; S.tab = tabOf(S.screen); render();
+    navDir = 'back'; S.screen = S.stack.pop() || 'home'; S.tab = tabOf(S.screen); render();
   }
-  function pickTab(tab, screen) { S.tab = tab; S.screen = screen; S.stack = []; render(); }
-  function openLesson(i) { S.lesson = i; S.stack.push(S.screen); S.screen = 'reader'; S.tab = 'lessons'; render(); }
+  function pickTab(tab, screen) { navDir = 'tab'; S.tab = tab; S.screen = screen; S.stack = []; render(); }
+  function openLesson(i) { navDir = 'fwd'; S.lesson = i; S.stack.push(S.screen); S.screen = 'reader'; S.tab = 'lessons'; render(); }
 
   function progress() {
     return { count: S.done.length, pct: Math.round(S.done.length / LESSONS.length * 100) + '%' };
@@ -630,6 +633,66 @@
   };
 
   /* ── shell render ────────────────────────────────── */
+  /* ── motion ──────────────────────────────────────── */
+  var lastView = null, lastPct = null, replayChart = false;
+
+  function reduced() {
+    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  /* Stagger the direct children so a view assembles rather than blinks. */
+  function stagger(main) {
+    var kids = main.children, n = Math.min(kids.length, 14);
+    for (var i = 0; i < n; i++) kids[i].style.setProperty('--i', String(i));
+  }
+
+  /* Grow the bar from where it stood, so finishing a lesson reads as progress. */
+  function tweenProgress(main, from) {
+    main.querySelectorAll('.progress > span').forEach(function (sp) {
+      var to = sp.style.width;
+      if (!to || to === from) return;
+      sp.style.width = from || '0%';
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { sp.style.width = to; });
+      });
+    });
+  }
+
+  /* The circular chart draws its geometry, then the labels that sit on it. */
+  function drawWheel(main) {
+    var w = main.querySelector('.wheel');
+    if (!w || reduced()) return;
+    var shapes = w.querySelectorAll('svg circle, svg line');
+    if (!shapes.length || typeof shapes[0].getTotalLength !== 'function') return;
+    w.classList.add('is-drawing');
+    shapes.forEach(function (el, i) {
+      var len;
+      try { len = el.getTotalLength(); } catch (e) { return; }
+      if (!len) return;
+      el.style.strokeDasharray = len;
+      el.animate([{ strokeDashoffset: len }, { strokeDashoffset: 0 }],
+        { duration: 620, delay: 80 + i * 38, easing: 'cubic-bezier(.3,.8,.4,1)', fill: 'both' });
+    });
+    var last = null;
+    w.querySelectorAll('.wheel-label, .wheel-planet, .wheel-center').forEach(function (el, i) {
+      last = el.animate(
+        [{ opacity: 0, transform: 'translate(-50%,-50%) scale(.88)' },
+         { opacity: 1, transform: 'translate(-50%,-50%) scale(1)' }],
+        { duration: 300, delay: 430 + i * 20, easing: 'cubic-bezier(.2,.7,.3,1)', fill: 'both' });
+    });
+    if (last) last.finished.then(function () { w.classList.remove('is-drawing'); }, function () {});
+  }
+
+  /* The square chart has no strokes to draw, so its houses light up in turn. */
+  function revealSquare(main) {
+    var tk = main.querySelector('.tk');
+    if (!tk || reduced()) return;
+    tk.querySelectorAll('.tk-cell, .tk-center').forEach(function (el, i) {
+      el.animate([{ opacity: 0 }, { opacity: 1 }],
+        { duration: 260, delay: 40 + i * 32, easing: 'ease-out', fill: 'both' });
+    });
+  }
+
   function render() {
     var head = HEADS[S.screen] || HEADS.home;
     if (S.screen === 'reader') head = ['บทที่ ' + LESSONS[S.lesson].n, LESSONS[S.lesson].t];
@@ -647,12 +710,35 @@
     var scroll = root.querySelector('.app-main');
     var y = scroll ? scroll.scrollTop : 0;
     var keep = S.screen === 'search' && document.activeElement && document.activeElement.dataset.bind === 'q';
+    /* Re-rendering the same view in place (ticking a lesson, picking a slot)
+       keeps its scroll position; moving to a new view starts at the top. */
+    var view = S.screen + (S.screen === 'reader' ? '/' + S.lesson : '');
+    var sameView = view === lastView;
+    var oldBar = root.querySelector('.progress > span');
+    var fromPct = oldBar ? oldBar.style.width : lastPct;
     root.innerHTML = html;
+    var m = root.querySelector('.app-main');
+    if (m && sameView) m.scrollTop = y;
     if (keep) {
       var el = root.querySelector('[data-bind="q"]');
       if (el) { el.focus(); el.setSelectionRange(el.value.length, el.value.length); }
-      var m = root.querySelector('.app-main'); if (m) m.scrollTop = y;
     }
+    /* Record the target before tweenProgress rewinds the bar to its start. */
+    var bar = root.querySelector('.progress > span');
+    if (bar) lastPct = bar.style.width;
+    if (m) {
+      if (!sameView) {
+        m.classList.add('nav-' + navDir);
+        stagger(m);
+        var hd = root.querySelector('.app-header .head');
+        if (hd) hd.classList.add('is-new');
+      }
+      tweenProgress(m, fromPct);
+      if (!sameView || replayChart) { drawWheel(m); revealSquare(m); }
+    }
+    replayChart = false;
+    navDir = 'tab';
+    lastView = view;
     wireMarquee(root);
     save();
   }
@@ -669,8 +755,10 @@
       if (S.done.indexOf(S.lesson) < 0) S.done.push(S.lesson);
       return render();
     }
-    if (act === 'cstyle') { S.chartStyle = el.dataset.t; return render(); }
-    if (act === 'cast') { S.chartDone = true; return render(); }
+    /* Switching chart style re-renders the same view, so the draw has to be
+       asked for explicitly or the new chart would just appear. */
+    if (act === 'cstyle') { S.chartStyle = el.dataset.t; replayChart = true; return render(); }
+    if (act === 'cast') { replayChart = true; S.chartDone = true; return render(); }
     if (act === 'calday') { S.calDay = +el.dataset.d; return render(); }
     if (act === 'svc') { S.booking.svc = el.dataset.t; return render(); }
     if (act === 'slot') { S.booking.slot = el.dataset.t; return render(); }
