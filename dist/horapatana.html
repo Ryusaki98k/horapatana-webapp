@@ -529,26 +529,32 @@ select.input{appearance:none;-webkit-appearance:none;cursor:pointer;padding-righ
 
 /* ── site footer ─────────────────────────────────────── */
 /* Links flow and wrap rather than stacking one per line — eight menu items in a
-   column made the footer taller than the screen it sat under. */
+   column made the footer taller than the screen it sat under.
+   The ground runs --red into --red-deep, so every mark on it flips to light. */
 .site-foot{margin-top:var(--s-6);padding:var(--s-5) var(--s-5) 0;
-  border-top:1px solid var(--gold-line);background:var(--gold-wash)}
+  border-top:1px solid var(--gold);color:var(--white);
+  background:linear-gradient(180deg,var(--red) 0%,var(--red-deep) 100%)}
 .sf-top{display:flex;align-items:center;gap:10px;margin-bottom:var(--s-4)}
 .sf-top img{flex:none;border-radius:50%;
-  box-shadow:0 0 0 1px var(--gold),0 0 0 3px color-mix(in srgb,var(--gold) 20%,var(--white))}
-.sf-name{font:400 14px/1.45 var(--font-b);color:var(--dim)}
-.sf-name em{display:block;font:400 20px/1.25 var(--font-script);font-style:normal;color:var(--gold-ink)}
+  box-shadow:0 0 0 1px var(--gold),0 0 0 3px rgba(255,255,255,.22)}
+.sf-name{font:400 14px/1.45 var(--font-b);color:rgba(255,255,255,.8)}
+/* Pure --gold on --red is only 3.1:1. Lightened the same way every other
+   token in this palette is derived — a mix of the three base colours. */
+.sf-name em{display:block;font:400 21px/1.28 var(--font-script);font-style:normal;
+  color:color-mix(in srgb,var(--gold) 52%,var(--white))}
 
 .sf-nav{display:flex;flex-wrap:wrap;align-items:center;gap:0 9px}
-.sf-contact{margin-top:6px;padding-top:10px;border-top:1px solid var(--gold-hair)}
+.sf-contact{margin-top:6px;padding-top:10px;border-top:1px solid rgba(255,255,255,.2)}
 .sf-dot{width:3px;height:3px;flex:none;transform:rotate(45deg);background:var(--gold)}
 .sf-link{padding:5px 0;background:none;border:0;cursor:pointer;text-decoration:none;
-  font:400 14.5px/1.5 var(--font-b);color:var(--paper);transition:color .16s}
-.sf-link:hover{color:var(--red)}
+  font:400 14.5px/1.5 var(--font-b);color:rgba(255,255,255,.93);transition:color .16s}
+.sf-link:hover{color:var(--gold)}
+.site-foot :focus-visible{outline:1.5px solid var(--gold);outline-offset:3px}
 
 /* The floating LINE button covers this corner on phones, so the last line keeps
    just enough room to stay clear of it. */
-.sf-copy{margin-top:12px;padding:10px 0 68px;border-top:1px solid var(--gold-hair);
-  font-size:13px;line-height:1.5;color:var(--dim)}
+.sf-copy{margin-top:12px;padding:10px 0 68px;border-top:1px solid rgba(255,255,255,.2);
+  font-size:13px;line-height:1.5;color:rgba(255,255,255,.7)}
 
 @media (min-width:720px){
   .sf-copy{padding-bottom:var(--s-5)}
