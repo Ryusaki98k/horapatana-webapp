@@ -247,11 +247,14 @@
   /* Third-party recognition carries the trust that a round number cannot. */
   function honours() {
     if (!HONOURS || !HONOURS.length) return '';
-    return '<div class="sec-title">ได้รับการยอมรับ</div>' +
+    /* Heading and cards share one wrapper so they cannot drift to different
+       widths — on desktop the block is centred as a unit. */
+    return '<section class="honours-block">' +
+      '<div class="sec-title">ได้รับการยอมรับ</div>' +
       '<ul class="honours">' + HONOURS.map(function (h) {
         return '<li><span class="hon-t">' + esc(h.t) + '</span>' +
                '<span class="hon-by">' + esc(h.by) + '</span></li>';
-      }).join('') + '</ul>';
+      }).join('') + '</ul></section>';
   }
 
   /* Credibility before persuasion — unverified figures are omitted rather than
