@@ -21,3 +21,8 @@ desktop.ini
 
 # Unpacked copy of the zip — the zip and the single-file build are enough
 dist/horapatana-build/
+
+# Full mirror of horapatana.com (272 MB, 352 images incl. the whole Zyro media
+# library). Kept locally as a reference/backup — this repo is public, and the
+# library holds far more than the site actually shows.
+archive/
