@@ -284,6 +284,38 @@
       '</svg><span>ทักไลน์</span></a>';
   }
 
+  /* Site footer — the same shortcuts and contact details the website carries,
+     so the app ends the way the site does rather than trailing off. */
+  var FOOT_MENU = [
+    ['home','home','หน้าแรก'], ['lessons','lessons','บทเรียนโหราศาสตร์ไทย'],
+    ['chart','chart','ผูกดวงชะตา'], ['ruek','calendar','ปฏิทินฤกษ์'],
+    ['me','courses','คอร์สเรียน'], ['me','teacher','ประวัติอาจารย์พัฒนา'],
+    ['me','videos','วิดีโอ'], ['me','articles','บทความ']
+  ];
+  function siteFooter() {
+    return '<footer class="site-foot">' +
+      '<div class="orn"><i></i></div>' +
+      '<div class="sf-brand"><img src="logo.png" width="44" height="44" alt="">' +
+      '<div><div class="sf-name">เรียนดวง กับ บรมครูโหร</div>' +
+      '<div class="sf-name sf-em">พัฒนา พัฒนศิริ</div></div></div>' +
+
+      '<div class="sf-cols">' +
+      '<nav class="sf-col"><div class="sf-h">เมนูทางลัด</div>' +
+      FOOT_MENU.map(function (m) {
+        return '<button class="sf-link" data-act="tab" data-tab="' + m[0] + '" data-screen="' + m[1] + '">' +
+          esc(m[2]) + '</button>';
+      }).join('') + '</nav>' +
+
+      '<div class="sf-col"><div class="sf-h">ติดต่อเรา</div>' +
+      '<a class="sf-link" href="tel:' + esc(CONTACT.tel.replace(/\s/g, '')) + '">โทรศัพท์ : ' + esc(CONTACT.tel) + '</a>' +
+      '<a class="sf-link" href="https://line.me/R/ti/p/~' + esc(CONTACT.lineId) + '" target="_blank" rel="noopener">ไลน์ไอดี : ' + esc(CONTACT.lineId) + '</a>' +
+      '<a class="sf-link" href="' + esc(CONTACT.youtube) + '" target="_blank" rel="noopener">ช่อง YouTube</a>' +
+      '</div></div>' +
+
+      '<div class="sf-copy">© 2026 Miracle Life Coach Co., Ltd. · สงวนลิขสิทธิ์</div>' +
+      '</footer>';
+  }
+
   function lessonRows(showTags) {
     var maxDone = Math.max.apply(null, S.done.concat([-1]));
     return LESSONS.map(function (l, i) {
@@ -473,7 +505,7 @@
         '<p style="margin:10px 0 0;font-size:13px;line-height:1.7">' + esc(c.body) + '</p>' +
         '<div class="chips">' + c.tags.map(function (t) { return '<span class="tag tag-neutral">' + esc(t) + '</span>'; }).join('') + '</div>' +
         '<button class="btn btn-primary btn-block" style="margin-top:12px" data-act="go" data-screen="booking">สมัครเรียน</button></div>';
-    }).join('') + '<div class="foot">สอบถามก่อนสมัคร โทร 084 943 1133 · ไลน์ไอดี 0849431133</div>';
+    }).join('');
   };
 
   V.booking = function () {
@@ -577,7 +609,7 @@
         return '<div class="row"' + attrs + '><div class="row-main"><div class="row-title" style="font-size:15px">' + esc(r[0]) + '</div>' +
           '<div class="row-sub">' + esc(r[1]) + '</div></div>' + ICON.chev + '</div>';
       }).join('') +
-      '<div class="foot">© 2026 Miracle Life Coach Co., Ltd.</div>';
+      '';
   };
 
   V.search = function () {
@@ -608,7 +640,7 @@
         '<img class="app-logo" src="logo.png" width="40" height="40" alt="ตราบรมครูโหร" data-act="tab" data-tab="home" data-screen="home">') +
       '<div class="head"><div class="kicker">' + esc(head[0]) + '</div><h1 class="app-title">' + esc(head[1]) + '</h1></div>' +
       '<button class="icon-btn" data-act="go" data-screen="search" aria-label="ค้นหา">' + ICON.search + '</button></header>' +
-      '<main class="app-main">' + (V[S.screen] || V.home)() + '</main>' +
+      '<main class="app-main">' + (V[S.screen] || V.home)() + siteFooter() + '</main>' +
       '<nav class="tabs">' + TABS.map(function (t) {
         return '<button class="tab" ' + (S.tab === t[0] ? 'aria-current="page" ' : '') +
           'data-act="tab" data-tab="' + t[0] + '" data-screen="' + t[2] + '"><span class="dot"></span>' + t[1] + '</button>';
