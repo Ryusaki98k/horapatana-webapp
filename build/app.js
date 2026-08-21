@@ -293,26 +293,24 @@
     ['me','videos','วิดีโอ'], ['me','articles','บทความ']
   ];
   function siteFooter() {
+    var dot = '<i class="sf-dot" aria-hidden="true"></i>';
     return '<footer class="site-foot">' +
-      '<div class="orn"><i></i></div>' +
-      '<div class="sf-brand"><img src="logo.png" width="44" height="44" alt="">' +
-      '<div><div class="sf-name">เรียนดวง กับ บรมครูโหร</div>' +
-      '<div class="sf-name sf-em">พัฒนา พัฒนศิริ</div></div></div>' +
+      '<div class="sf-top"><img src="logo.png" width="34" height="34" alt="">' +
+      '<span class="sf-name">เรียนดวง กับ บรมครูโหร <em>พัฒนา พัฒนศิริ</em></span></div>' +
 
-      '<div class="sf-cols">' +
-      '<nav class="sf-col"><div class="sf-h">เมนูทางลัด</div>' +
-      FOOT_MENU.map(function (m) {
-        return '<button class="sf-link" data-act="tab" data-tab="' + m[0] + '" data-screen="' + m[1] + '">' +
-          esc(m[2]) + '</button>';
+      '<nav class="sf-nav" aria-label="เมนูทางลัด">' +
+      FOOT_MENU.map(function (mn, i) {
+        return (i ? dot : '') + '<button class="sf-link" data-act="tab" data-tab="' + mn[0] +
+          '" data-screen="' + mn[1] + '">' + esc(mn[2]) + '</button>';
       }).join('') + '</nav>' +
 
-      '<div class="sf-col"><div class="sf-h">ติดต่อเรา</div>' +
-      '<a class="sf-link" href="tel:' + esc(CONTACT.tel.replace(/\s/g, '')) + '">โทรศัพท์ : ' + esc(CONTACT.tel) + '</a>' +
-      '<a class="sf-link" href="https://line.me/R/ti/p/~' + esc(CONTACT.lineId) + '" target="_blank" rel="noopener">ไลน์ไอดี : ' + esc(CONTACT.lineId) + '</a>' +
-      '<a class="sf-link" href="' + esc(CONTACT.youtube) + '" target="_blank" rel="noopener">ช่อง YouTube</a>' +
-      '</div></div>' +
+      '<div class="sf-nav sf-contact">' +
+      '<a class="sf-link" href="tel:' + esc(CONTACT.tel.replace(/\s/g, '')) + '">โทร ' + esc(CONTACT.tel) + '</a>' + dot +
+      '<a class="sf-link" href="https://line.me/R/ti/p/~' + esc(CONTACT.lineId) + '" target="_blank" rel="noopener">ไลน์ ' + esc(CONTACT.lineId) + '</a>' + dot +
+      '<a class="sf-link" href="' + esc(CONTACT.youtube) + '" target="_blank" rel="noopener">YouTube</a>' +
+      '</div>' +
 
-      '<div class="sf-copy">© 2026 Miracle Life Coach Co., Ltd. · สงวนลิขสิทธิ์</div>' +
+      '<div class="sf-copy">© 2026 Miracle Life Coach Co., Ltd.</div>' +
       '</footer>';
   }
 
