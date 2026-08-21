@@ -1,0 +1,43 @@
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ราศีพฤษภ">
+  <rect width="400" height="400" fill="#C6D9E8"/>
+  <g stroke="#FFE800" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <g>
+      <path d="M4 96h34v56H4z" fill="#E0A7B4"/>
+      <path d="M14 60c0-12 8-20 20-20s20 8 20 20v18H14z" fill="#B7A96A"/>
+      <path d="M28 88h30v64H28z" fill="#2A1FB0"/>
+      <path d="M56 62h44v90H56z" fill="#5B4FC9"/>
+      <path d="M78 34l24 28H54z" fill="#B0605A"/>
+      <path d="M88 74c0-12 8-20 20-20s20 8 20 20v16H88z" fill="#B7A96A"/>
+      <path d="M100 96h30v56h-30z" fill="#A05BC4"/>
+      <path d="M128 82h56v70h-56z" fill="#C46FD4"/>
+      <path d="M128 82v-14h10v8h10v-8h10v8h10v-8h10v14z" fill="#C46FD4"/>
+      <path d="M10 104h8v10h-8zM22 104h8v10h-8z" fill="#F2D65C"/>
+    </g>
+    <path d="M0 152C70 116 150 112 214 138 278 164 336 176 400 166V400H0Z" fill="#0B6B3A"/>
+    <path d="M0 246C80 216 150 208 226 216 302 224 350 214 400 194V400H0Z" fill="#5FD99A"/>
+    <path d="M318 118V90" stroke="#7A5A18"/>
+    <circle cx="318" cy="88" r="28" fill="#3FD99A"/>
+    <path d="M362 116V78" stroke="#7A5A18"/>
+    <path d="M362 78c-16 0-28-14-28-30s12-38 28-38 28 22 28 38-12 30-28 30z" fill="#0E6B3A"/>
+  </g>
+  <g stroke="#FFE800" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M204 176l14 44 34-16z" fill="#CFC7B4"/>
+    <path d="M286 176l-12 44-34-16z" fill="#CFC7B4"/>
+    <path d="M40 224c26-16 66-24 112-24 30 0 54 4 70 12l24 40c-4 22-20 34-44 36-8 30-10 60-8 90h-22c-2-30-2-56 0-80-30 4-58 4-84-2 2 28 2 56 0 82h-22c-2-30-2-60 2-90-22-10-32-28-28-64z" fill="#DCE8EC"/>
+    <path d="M226 188c22 0 40 14 44 44 4 30-10 50-32 54-14-24-22-52-24-84 4-10 8-14 12-14z" fill="#EEF4F6"/>
+    <path d="M40 232c-14-4-22 4-24 18-2 12 4 20 14 22" fill="none"/>
+    <path d="M96 244c14-6 30-4 38 6 6 10-2 20-16 22-16 2-28-4-30-14-2-6 2-12 8-14z" fill="#141414"/>
+    <path d="M162 256c16-8 34-4 42 8 6 12-4 24-20 26-18 2-32-6-34-18-2-8 4-14 12-16z" fill="#141414"/>
+    <path d="M150 320c14-6 28-2 34 8 4 10-4 18-18 20-14 2-26-4-28-14-2-6 4-12 12-14z" fill="#141414"/>
+    <path d="M48 316c8-4 16 0 18 8 2 8-4 14-12 14s-12-6-10-14z" fill="#141414"/>
+    <path d="M222 274c8-4 16 0 18 8 2 8-4 14-12 14s-12-6-10-14z" fill="#141414"/>
+    <circle cx="246" cy="212" r="3" fill="#141414" stroke="none"/>
+  </g>
+  <g stroke="#FFE800" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M334 388V318" stroke="#7A5A18"/>
+    <path d="M334 356c-16-14-32-18-42-14 4 14 16 24 30 26z" fill="#1E7A3A"/>
+    <path d="M334 356c16-14 32-18 42-14-4 14-16 24-30 26z" fill="#2FBF6E"/>
+    <path d="M312 300c0-18 10-32 22-36 12 4 22 18 22 36 0 14-8 24-22 28-14-4-22-14-22-28z" fill="#EE1B1B"/>
+    <path d="M312 300l10-22 12 16 12-16 10 22" fill="#EE1B1B"/>
+  </g>
+</svg>

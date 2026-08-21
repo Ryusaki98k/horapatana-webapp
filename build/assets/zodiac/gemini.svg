@@ -1,0 +1,37 @@
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ราศีเมถุน">
+  <defs>
+    <g id="palm" stroke="#FFE800" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M-14 16h34l24 292H4Z" fill="#8A6B6B"/>
+      <path d="M18 26c34-4 66 12 86 44-30-6-56-2-78 12z" fill="#0E9E52"/>
+      <path d="M20 42c40 6 68 34 78 74-26-20-52-28-78-24z" fill="#12B85F"/>
+      <path d="M22 60c34 22 52 56 52 96-20-30-42-50-62-56z" fill="#0E9E52"/>
+      <path d="M0 114c26-2 48 10 62 34-24-4-44 0-58 12z" fill="#12B85F"/>
+      <path d="M4 116l86 24" fill="none"/>
+      <path d="M22 106c18-8 34-6 44 6-14 6-28 6-40 0z" fill="#CFCE86"/>
+      <path d="M28 122c18-8 34-6 44 6-14 6-28 6-40 0z" fill="#CFCE86"/>
+      <path d="M40 138c18-8 34-6 44 6-14 6-28 6-40 0z" fill="#CFCE86"/>
+      <path d="M54 152c18-8 34-6 44 6-14 6-28 6-40 0z" fill="#CFCE86"/>
+    </g>
+    <g id="figure" stroke="#FFE800" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M34 190c-16 0-28 12-28 30 0 14 8 24 20 28l16-8-2-42z" fill="#D9E2E2"/>
+      <path d="M44 186c14 0 24 10 24 24s-10 24-24 24-22-10-22-24 8-24 22-24z" fill="#E8B8B0"/>
+      <path d="M6 234c-14 8-22 22-22 42l4 34 84-10-8-56z" fill="#D6D0C6"/>
+      <path d="M-16 300l90-14 26 46-14 34-96-6z" fill="#C41220"/>
+      <path d="M46 344h30l14 30h-34z" fill="#C41220"/>
+      <path d="M92 320c10-4 18 2 18 12s-8 16-18 14z" fill="#E8B8B0"/>
+      <path d="M78 360c14 0 24 6 28 18H68z" fill="#E8B8B0"/>
+    </g>
+  </defs>
+
+  <rect width="400" height="400" fill="#2E6FD4"/>
+  <g stroke="#FFE800" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <circle cx="200" cy="56" r="30" fill="#E0B94C"/>
+    <path d="M0 316c50-30 110-44 200-44s150 14 200 44v84H0Z" fill="#E5B33F"/>
+    <ellipse cx="200" cy="288" rx="126" ry="52" fill="#12B85F"/>
+  </g>
+
+  <use href="#palm" x="0" y="0"/>
+  <use href="#palm" transform="translate(400 0) scale(-1 1)"/>
+  <use href="#figure" x="34" y="6"/>
+  <use href="#figure" transform="translate(366 6) scale(-1 1)"/>
+</svg>

@@ -1,0 +1,23 @@
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ราศีกรกฎ">
+  <rect width="400" height="400" fill="#C98BD8"/>
+  <g stroke="#FFE800" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M0 104C58 88 112 120 170 112C228 104 284 80 344 92C368 97 386 106 400 102V240H0Z" fill="#1E23A8"/>
+    <path d="M0 132C56 118 110 148 168 140C226 132 282 110 342 122C366 127 386 134 400 130V245H0Z" fill="#2A56C8"/>
+    <path d="M0 158C54 146 108 174 166 166C224 158 280 138 340 150C364 155 386 160 400 156V255H0Z" fill="#2C79C2"/>
+    <path d="M0 182C52 172 106 196 164 189C222 182 278 164 338 175C362 180 386 184 400 180V265H0Z" fill="#2490BE"/>
+    <path d="M0 204C50 196 104 216 162 210C220 204 276 188 336 198C360 202 386 205 400 202V280H0Z" fill="#15BFD2"/>
+    <path d="M0 232C64 226 96 238 168 236C240 234 300 224 400 230V400H0Z" fill="#E5B33F"/>
+  </g>
+  <g fill="#F5121F" stroke="#FFE800" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M78 316 12 300l64 6-58 26z"/>
+    <path d="M80 330 22 340l58-2-50 30z"/>
+    <path d="M92 348 52 386l40-24-14 34z"/>
+    <path d="M112 356 100 400l16-40 16 36z"/>
+    <path d="M150 352l30 34-26-30 34 14z"/>
+    <path d="M158 332l52 8-50 2 44 20z"/>
+    <path d="M92 302 70 268l30 26-6-36z"/>
+    <circle cx="118" cy="326" r="44"/>
+    <path d="M104 288c-4-22 2-40 14-48 4 14 2 26-2 34 12-6 22-6 30 2-10 14-26 20-42 12z"/>
+    <path d="M158 306c14-16 30-22 42-18-6 12-16 20-24 22 12 4 20 12 22 22-16 4-32-6-40-26z"/>
+  </g>
+</svg>

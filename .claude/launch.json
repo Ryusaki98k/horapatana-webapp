@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "horapatana-build",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "4173", "--directory", "build"],
+      "port": 4173
+    },
+    {
+      "name": "horapatana-handoff",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "4174", "--directory", "build-handoff"],
+      "port": 4174
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+# Working copies kept while the design direction was being decided
+build-handoff/
+build-mine-backup/
+
+# Claude Design canvas scaffolding — not part of the shipped app
+_ds/
+*.dc.html
+support.js
+ios-frame.jsx
+.thumbnail
+
+# Loose screenshots and pasted images from the design conversation
+messageimage_*.jpg
+screenshot-*.png
+logo-*.png
+
+# OS / editor
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Unpacked copy of the zip — the zip and the single-file build are enough
+dist/horapatana-build/
