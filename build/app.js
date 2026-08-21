@@ -640,6 +640,40 @@
     return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
+  /* Thai numerals are the app's own counting system, so a figure that counts
+     up should count in them rather than flipping to Arabic on the way. */
+  var TH_NUM = '๐๑๒๓๔๕๖๗๘๙';
+  function thaiToInt(str) {
+    var out = '';
+    String(str).split('').forEach(function (ch) {
+      var i = TH_NUM.indexOf(ch);
+      if (i >= 0) out += i; else if (/[0-9]/.test(ch)) out += ch;
+    });
+    return out === '' ? null : parseInt(out, 10);
+  }
+  function intToThai(n) {
+    return String(n).split('').map(function (d) { return TH_NUM[+d]; }).join('');
+  }
+  /* Figures tick up on arrival; the suffix (+) is preserved. */
+  function countUp(main) {
+    if (reduced()) return;
+    main.querySelectorAll('.stat-n').forEach(function (el, idx) {
+      var raw = el.textContent, target = thaiToInt(raw);
+      if (target === null || target > 999) return;
+      var suffix = raw.replace(/[๐-๙0-9]/g, '');
+      var dur = 900, start = null, delay = 140 + idx * 90;
+      el.textContent = intToThai(0) + suffix;
+      setTimeout(function step(ts) {
+        if (typeof ts !== 'number') { requestAnimationFrame(step); return; }
+        if (start === null) start = ts;
+        var t = Math.min(1, (ts - start) / dur);
+        var eased = 1 - Math.pow(1 - t, 3);
+        el.textContent = intToThai(Math.round(target * eased)) + suffix;
+        if (t < 1) requestAnimationFrame(step);
+      }, delay);
+    });
+  }
+
   /* Stagger the direct children so a view assembles rather than blinks. */
   function stagger(main) {
     var kids = main.children, n = Math.min(kids.length, 14);
@@ -734,6 +768,7 @@
         if (hd) hd.classList.add('is-new');
       }
       tweenProgress(m, fromPct);
+      if (!sameView) countUp(m);
       if (!sameView || replayChart) { drawWheel(m); revealSquare(m); }
     }
     replayChart = false;

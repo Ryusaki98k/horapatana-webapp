@@ -556,22 +556,62 @@ select.input{appearance:none;-webkit-appearance:none;cursor:pointer;padding-righ
 }
 
 /* ── motion ──────────────────────────────────────────── */
-/* Unhurried to match the manuscript tone — nothing springs or bounces. */
-:root{--ease:cubic-bezier(.22,.68,.32,1); --dur:.34s}
+/* Paced like a manuscript being read: unhurried, nothing springs or bounces.
+   The page turns, gold catches the light, and numerals settle onto the leaf. */
+:root{--ease:cubic-bezier(.22,.68,.32,1); --dur:.42s}
 
-@keyframes hp-fwd{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
-@keyframes hp-back{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
-@keyframes hp-up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-@keyframes hp-head{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+/* A leaf turning rather than a panel sliding — the far edge hangs back. */
+@keyframes hp-fwd{
+  from{opacity:0;transform:perspective(1100px) rotateY(-7deg) translateX(20px)}
+  to{opacity:1;transform:none}}
+@keyframes hp-back{
+  from{opacity:0;transform:perspective(1100px) rotateY(7deg) translateX(-20px)}
+  to{opacity:1;transform:none}}
+@keyframes hp-up{
+  from{opacity:0;transform:perspective(1100px) rotateX(3deg) translateY(14px)}
+  to{opacity:1;transform:none}}
+@keyframes hp-head{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
 
-/* Children stagger via --i, set on each direct child after render. */
 .app-main.nav-fwd > *,.app-main.nav-back > *,.app-main.nav-tab > *{
   animation-duration:var(--dur);animation-timing-function:var(--ease);
-  animation-fill-mode:both;animation-delay:calc(var(--i,0) * 30ms)}
+  animation-fill-mode:both;animation-delay:calc(var(--i,0) * 34ms);
+  transform-origin:left center}
 .app-main.nav-fwd > *{animation-name:hp-fwd}
-.app-main.nav-back > *{animation-name:hp-back}
-.app-main.nav-tab > *{animation-name:hp-up}
-.app-header .head.is-new{animation:hp-head .36s var(--ease) both}
+.app-main.nav-back > *{animation-name:hp-back;transform-origin:right center}
+.app-main.nav-tab > *{animation-name:hp-up;transform-origin:center top}
+.app-header .head.is-new{animation:hp-head .4s var(--ease) both}
+
+/* Gold rules draw outward from the centre, and the lozenge turns as it lands. */
+@keyframes hp-rule{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes hp-lozenge{from{opacity:0;transform:rotate(0deg) scale(.2)}
+  to{opacity:1;transform:rotate(45deg) scale(1)}}
+.nav-fwd .orn::before,.nav-back .orn::before,.nav-tab .orn::before,
+.nav-fwd .orn::after,.nav-back .orn::after,.nav-tab .orn::after{
+  animation:hp-rule .62s var(--ease) both;animation-delay:.16s}
+.orn::before{transform-origin:right center}
+.orn::after{transform-origin:left center}
+.nav-fwd .orn i,.nav-back .orn i,.nav-tab .orn i{animation:hp-lozenge .5s var(--ease) both;animation-delay:.34s}
+
+/* Section rules unroll the same way. */
+.nav-fwd .sec-title::after,.nav-back .sec-title::after,.nav-tab .sec-title::after{
+  transform-origin:left center;animation:hp-rule .7s var(--ease) both;animation-delay:.2s}
+
+/* Candlelight passing over gold leaf — one slow sweep as a view arrives. */
+@keyframes hp-sheen{from{background-position:-140% 0}to{background-position:240% 0}}
+.nav-fwd .stat-n,.nav-back .stat-n,.nav-tab .stat-n,
+.nav-fwd .row-num,.nav-back .row-num,.nav-tab .row-num{
+  background-image:linear-gradient(100deg,transparent 38%,
+    color-mix(in srgb,var(--gold) 55%,var(--white)) 50%,transparent 62%);
+  background-size:220% 100%;background-repeat:no-repeat;
+  -webkit-background-clip:text;background-clip:text;
+  animation:hp-sheen 1.5s ease-out both;animation-delay:.42s}
+
+/* The oversized Thai numerals settle onto the page rather than appearing. */
+@keyframes hp-numeral{from{opacity:0;transform:translateY(6px) scale(.9)}
+  to{opacity:1;transform:none}}
+.nav-fwd .row-num,.nav-back .row-num,.nav-tab .row-num{
+  animation:hp-sheen 1.5s ease-out both,hp-numeral .5s var(--ease) both;
+  animation-delay:.42s,calc(var(--i,0) * 34ms + .1s)}
 
 /* Touch feedback — a small give, no scaling that blurs Thai diacritics. */
 .row,.card,.pick,.slot,.cal-day,.video-row,.article,.mq-item,.honours li,.tk-cell{
@@ -581,10 +621,8 @@ select.input{appearance:none;-webkit-appearance:none;cursor:pointer;padding-righ
 .cal-day:not(.empty):active{transform:scale(.93)}
 .icon-btn:active,.app-logo:active{transform:scale(.92)}
 
-/* Progress fills rather than jumps. */
 .progress > span{transition:width .8s var(--ease)}
 
-/* Labels wait for the geometry beneath them. */
 .wheel.is-drawing .wheel-label,
 .wheel.is-drawing .wheel-planet,
 .wheel.is-drawing .wheel-center{opacity:0}
@@ -596,6 +634,9 @@ select.input{appearance:none;-webkit-appearance:none;cursor:pointer;padding-righ
   .wheel.is-drawing .wheel-label,
   .wheel.is-drawing .wheel-planet,
   .wheel.is-drawing .wheel-center{opacity:1}
+  /* The sheen paints through background-clip:text, so it must be undone or the
+     numerals would keep its gradient instead of their own colour. */
+  .stat-n,.row-num{background-image:none;-webkit-background-clip:border-box;background-clip:border-box}
   .mq-track{animation:none}
   .marquee{overflow-x:auto}
   .mq-dup{display:none}
