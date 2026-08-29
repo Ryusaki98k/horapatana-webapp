@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>สาธิตระบบอ่านเสียงบทความ (Text-to-Speech Demo) · โหรพัฒนา</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai+Looped:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --white: #ffffff;
+      --red: #b51f26;
+      --red-deep: #8f151b;
+      --gold: #d4af37;
+      --gold-deep: #8c7324;
+      --gold-wash: #faf6eb;
+      --gold-line: #dfc87a;
+      --paper: #1f1b18;
+      --dim: #5c534e;
+      --font-h: 'Noto Sans Thai Looped', 'Sarabun', sans-serif;
+      --font-b: 'Sarabun', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #f4f0ea;
+      color: var(--paper);
+      font-family: var(--font-b);
+      font-size: 18px;
+      line-height: 1.75;
+      padding: 24px 16px 60px;
+    }
+
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      background: var(--white);
+      border-radius: 12px;
+      border: 1px solid var(--gold-line);
+      border-top: 4px solid var(--gold);
+      box-shadow: 0 12px 36px -8px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .header-bar {
+      background: var(--gold-wash);
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--gold-line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: var(--font-h);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gold-deep);
+      background: var(--white);
+      border: 1px solid var(--gold-line);
+      padding: 4px 10px;
+      border-radius: 99px;
+    }
+
+    .demo-tag {
+      font-size: 13px;
+      color: var(--red);
+      font-weight: 600;
+      font-family: var(--font-h);
+    }
+
+    .content {
+      padding: 24px 20px 32px;
+    }
+
+    h1 {
+      font-family: var(--font-h);
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--paper);
+      margin-bottom: 12px;
+    }
+
+    .meta {
+      font-size: 14.5px;
+      color: var(--dim);
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #eee;
+    }
+
+    /* ── กล่องควบคุมเสียงอ่าน (TTS Bar) ── */
+    .tts-box {
+      background: linear-gradient(135deg, var(--gold-wash) 0%, #fff 100%);
+      border: 1.5px solid var(--gold);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 14px rgba(212,175,55,0.15);
+    }
+
+    .tts-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .tts-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tts-icon {
+      font-size: 24px;
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    .tts-title {
+      font-family: var(--font-h);
+      font-weight: 600;
+      font-size: 16px;
+      color: var(--paper);
+    }
+
+    .tts-sub {
+      font-size: 13px;
+      color: var(--dim);
+    }
+
+    .tts-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--red);
+      color: var(--white);
+      border: 0;
+      border-radius: 99px;
+      padding: 10px 20px;
+      font-family: var(--font-h);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(181,31,38,0.3);
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .tts-btn:hover {
+      background: var(--red-deep);
+    }
+
+    .tts-btn:active {
+      transform: scale(0.97);
+    }
+
+    .tts-btn.is-playing {
+      background: #333;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    }
+
+    .speed-control {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--gold-line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      color: var(--dim);
+    }
+
+    .speed-buttons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .speed-btn {
+      background: var(--white);
+      border: 1px solid var(--gold-line);
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: var(--font-h);
+    }
+
+    .speed-btn.active {
+      background: var(--gold-deep);
+      color: #fff;
+      border-color: var(--gold-deep);
+    }
+
+    /* ── บทความ ── */
+    .article-body h2 {
+      font-family: var(--font-h);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--gold-deep);
+      margin: 22px 0 8px;
+    }
+
+    .article-body p {
+      margin-bottom: 16px;
+      text-align: justify;
+    }
+
+    .highlight-sentence {
+      background-color: rgba(212,175,55,0.25);
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: var(--dim);
+    }
+  </style>
+</head>
+<body>
+
+    <div class="header-bar">
+      <span class="badge">เกร็ดโหราศาสตร์ไทย</span>
+      <span class="demo-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg> Demo ทดลองฟังเสียง</span>
+    </div>
+
+    <div class="content">
+      <h1 id="art-title">ความสำคัญของ "ลัคนา" หัวใจแห่งการผูกดวงชะตาไทย</h1>
+      <div class="meta">โดย บรมครูโหรพัฒนา พัฒนศิริ · เหมาะสำหรับอ่านและฟัง</div>
+
+      <!-- กล่องเครื่องเล่นเสียงอ่านสำหรับผู้ใหญ่ -->
+      <div class="tts-box">
+        <div class="tts-header">
+          <div class="tts-info">
+            <span class="tts-icon" id="tts-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg></span>
+            <div>
+              <div class="tts-title" id="tts-status">ฟังเสียงอ่านบทความนี้</div>
+              <div class="tts-sub">เสียงสังเคราะห์ธรรมชาติ เพื่อความสบายตา</div>
+            </div>
+          </div>
+          <button class="tts-btn" id="btn-speak" onclick="togglePlay()">
+            <span id="btn-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8V4z"/></svg></span>
+            <span id="btn-text">ฟังเสียงอ่าน</span>
+          </button>
+        </div>
+
+        <div class="speed-control">
+          <span>ความเร็วเสียง:</span>
+          <div class="speed-buttons">
+            <button class="speed-btn" onclick="setSpeed(0.8, this)">0.8x (ช้าชัด)</button>
+            <button class="speed-btn active" onclick="setSpeed(0.95, this)">ปกติ (แนะนำ)</button>
+            <button class="speed-btn" onclick="setSpeed(1.15, this)">1.15x (เร็วขึ้น)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- เนื้อหาบทความ -->
+      <div class="article-body" id="article-text">
+        <h2>ลัคนาคืออะไรในวิชาโหราศาสตร์ไทย</h2>
+        <p>ลัคนา คือจุดที่ขอบฟ้าทิศตะวันออกตัดกับแนวระนาบสุริยวิถีในเวลาที่เจ้าชะตาลืมตาดูโลก เป็นเครื่องกำหนดว่าราศีใดคือภพตนุ หรือตัวตนที่แท้จริงของบุคคลนั้น การรู้เพียงวันเกิดโดยไม่รู้เวลาเกิด จึงเป็นเพียงการดูดาวลอยๆ ที่ยังไม่เจาะจงตัวตน</p>
+
+        <h2>เวลาเกิดคลาดเคลื่อน ผลต่างอย่างไร</h2>
+        <p>โลกหมุนรอบตัวเองตลอดเวลา ทำให้ลัคนาเคลื่อนย้ายไปทีละราศีในทุกๆ ราว ๒ ชั่วโมง หากเวลาเกิดคลาดเคลื่อนไปเพียงไม่กี่นาทีในช่วงรอยต่อราศี ลัคนาอาจข้ามไปยังอีกราศีหนึ่ง ส่งผลให้การทำนายภพทั้ง ๑๒ ภพเปลี่ยนไปโดยสิ้นเชิง</p>
+
+        <h2>ความแตกต่างระหว่างลัคนากับราศีเกิด</h2>
+        <p>คนทั่วไปมักคุ้นเคยกับราศีเกิดตามการโคจรของพระอาทิตย์ตลอดทั้งเดือน แต่ลัคนาคือนาฬิกาประจำตัวที่ระบุตำแหน่งดาวอย่างละเอียดระดับนาที ผู้ที่ศึกษาโหราศาสตร์ชั้นสูงจึงยึดถือลัคนาเป็นเสาหลักในการวางฤกษ์และทำนายชะตาชีวิตเสมอ</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    คำแนะนำ: ทดสอบเปิดบนโทรศัพท์มือถือ หรือคอมพิวเตอร์ แล้วกดปุ่ม <b>"ฟังเสียงอ่าน"</b> ได้ทันที
+  </div>
+
+  <script>
+    let synth = window.speechSynthesis;
+    let isSpeaking = false;
+    let currentRate = 0.95;
+
+    function getArticleFullText() {
+      const title = document.getElementById('art-title').innerText;
+      const content = document.getElementById('article-text').innerText;
+      return title + " ... " + content;
+    }
+
+    function togglePlay() {
+      if (!('speechSynthesis' in window)) {
+        alert('ขออภัย เบราว์เซอร์ของคุณไม่รองรับระบบสังเคราะห์เสียงอ่าน');
+        return;
+      }
+
+      if (isSpeaking) {
+        stopSpeaking();
+      } else {
+        startSpeaking();
+      }
+    }
+
+    function startSpeaking() {
+      synth.cancel(); // ล้างเสียงที่อาจค้างอยู่
+
+      const text = getArticleFullText();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'th-TH'; // กำหนดภาษาไทย
+      utter.rate = currentRate; // ปรับความเร็ว
+      utter.pitch = 1.0;
+
+      // พยายามเลือกเสียงภาษาไทยที่ติดตั้งในเครื่อง
+      const voices = synth.getVoices();
+      const thaiVoice = voices.find(v => v.lang === 'th-TH' || v.lang.startsWith('th'));
+      if (thaiVoice) {
+        utter.voice = thaiVoice;
+      }
+
+      utter.onstart = function() {
+        isSpeaking = true;
+        document.getElementById('btn-icon').innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>';
+        document.getElementById('btn-text').innerText = 'หยุดฟัง';
+        document.getElementById('btn-speak').classList.add('is-playing');
+        document.getElementById('tts-status').innerText = 'กำลังอ่านออกเสียง...';
+        document.getElementById('tts-icon').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>';
+      };
+
+      utter.onend = function() {
+        resetState();
+      };
+
+      utter.onerror = function() {
+        resetState();
+      };
+
+      synth.speak(utter);
+    }
+
+    function stopSpeaking() {
+      synth.cancel();
+      resetState();
+    }
+
+    function resetState() {
+      isSpeaking = false;
+      document.getElementById('btn-icon').innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8V4z"/></svg>';
+      document.getElementById('btn-text').innerText = 'ฟังเสียงอ่าน';
+      document.getElementById('btn-speak').classList.remove('is-playing');
+      document.getElementById('tts-status').innerText = 'ฟังเสียงอ่านบทความนี้';
+      document.getElementById('tts-icon').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>';
+    }
+
+    function setSpeed(rate, btn) {
+      currentRate = rate;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // ถ้ากำลังเล่นอยู่ ให้เริ่มอ่านใหม่ด้วยสปีดใหม่
+      if (isSpeaking) {
+        startSpeaking();
+      }
+    }
+
+    // หยุดอ่านเมื่อปิดหรือเปลี่ยนหน้า
+    window.addEventListener('beforeunload', () => {
+      if (synth) synth.cancel();
+    });
+  </script>
+</body>
+</html>
