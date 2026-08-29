@@ -1504,7 +1504,7 @@
       '<div class="kicker">คลังความรู้ & บทความ</div>' +
       adminBtn +
       '</div>' +
-      '<h1 class="sec-title" style="margin-top:0">คลังบทความและเกร็ดวิชาโหราศาสตร์</h1>' +
+      '<h1 class="page-main-heading">คลังบทความและเกร็ดวิชาโหราศาสตร์</h1>' +
       '<div class="articles-cats" role="tablist" aria-label="หมวดหมู่บทความ">' +
       cats.map(function (c) {
         return '<button class="cat-btn' + (curCat === c ? ' active' : '') + '" role="tab" aria-selected="' + (curCat === c ? 'true' : 'false') + '" data-act="artcat" data-cat="' + esc(c) + '">' +
@@ -1850,15 +1850,14 @@
       '<header class="app-header">' +
       '<div class="app-header-inner">' +
       '<div class="corner-loader" id="corner-loader" aria-hidden="true"><div class="corner-spinner"></div></div>' +
-      (S.stack.length
-        ? '<div style="display:flex;align-items:center;gap:8px"><button class="icon-btn back" data-act="back" aria-label="ย้อนกลับ">' + ICON.back + '</button>' +
-        '<div class="head"><div class="kicker">' + esc(head[0]) + '</div><div class="page-title">' + esc(head[1]) + '</div></div></div>'
-        : '<div class="app-brand" role="button" tabindex="0" aria-label="กลับหน้าแรก" data-act="tab" data-tab="home" data-screen="home">' +
-        '<img class="app-logo" src="logo.png" width="44" height="44" alt="ตราบรมครูโหรพัฒนา">' +
-        '<div class="brand-text">' +
-        '<span class="brand-kicker">สถาบันโหราศาสตร์ไทย</span>' +
-        '<span class="brand-title">โหรพัฒนา <em>พัฒนศิริ</em></span>' +
-        '</div></div>') +
+      '<div class="app-brand-area">' +
+      (S.stack.length ? '<button class="icon-btn back" data-act="back" aria-label="ย้อนกลับ">' + ICON.back + '</button>' : '') +
+      '<div class="app-brand" role="button" tabindex="0" aria-label="กลับหน้าแรก" data-act="tab" data-tab="home" data-screen="home">' +
+      '<img class="app-logo" src="logo.png" width="40" height="40" alt="ตราบรมครูโหรพัฒนา">' +
+      '<div class="brand-text">' +
+      '<span class="brand-kicker">สถาบันโหราศาสตร์ไทย</span>' +
+      '<span class="brand-title">โหรพัฒนา <em>พัฒนศิริ</em></span>' +
+      '</div></div></div>' +
       '<nav class="desktop-nav" aria-label="เมนูนำทางหลัก">' +
       activeTabs.map(function (t) {
         return '<button class="desktop-nav-link' + (S.tab === t[0] ? ' is-active' : '') + '" data-act="tab" data-tab="' + t[0] + '" data-screen="' + t[2] + '">' +

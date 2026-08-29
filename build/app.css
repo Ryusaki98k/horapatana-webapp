@@ -153,7 +153,7 @@ img, picture, svg, video { display: block; max-width: 100%; height: auto; }
   padding-bottom: 48px;
 }
 .main-container {
-  padding-top: var(--s-5);
+  padding-top: 24px;
   flex: 1;
 }
 
@@ -1024,22 +1024,31 @@ select.input {
 .row-title { font: 700 16.5px/1.3 var(--font-h); color: var(--paper); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .row-sub { font-size: 13.5px; margin-top: 3px; color: var(--dim); line-height: 1.45; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .row-state {
-  font: 700 12px/1 var(--font-h);
-  letter-spacing: .06em;
-  padding: 4px 8px;
+  font: 600 12.5px/1 var(--font-h);
+  letter-spacing: .04em;
+  padding: 4px 9px;
   border-radius: var(--r-xs);
   text-transform: uppercase;
   flex: none;
 }
-.row-state.now { background: var(--red-wash); color: var(--red-text); border: 1px solid var(--red); }
-.row-state.done { background: var(--gold-wash); color: var(--gold-ink); border: 1px solid var(--gold-hair); }
+.row-state.now {
+  background: var(--red);
+  color: #ffffff;
+  border: 1px solid var(--red-deep);
+  box-shadow: 0 2px 6px rgba(158, 32, 39, 0.35);
+}
+.row-state.done {
+  background: var(--gold-wash);
+  color: var(--gold-ink);
+  border: 1px solid var(--gold-hair);
+}
 
-/* ── Articles Grid & Cards (Strict Uniform Equal Dimensions) ─ */
+/* ── Articles Grid & Cards (Final Polish Pass) ──────── */
 .articles-header {
-  padding: var(--s-3) 0 var(--s-3);
+  padding: 0 0 16px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 .articles-toolbar {
   display: flex;
@@ -1048,6 +1057,37 @@ select.input {
   gap: 12px;
   flex-wrap: wrap;
 }
+.articles-toolbar .kicker {
+  font: 700 12.5px/1.2 var(--font-h);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--gold-ink);
+}
+.page-main-heading {
+  font: 700 clamp(24px, 2.6vw, 32px)/1.3 var(--font-h);
+  color: var(--paper);
+  margin: 4px 0 14px;
+  letter-spacing: -.01em;
+}
+.admin-badge-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  font: 500 13px/1 var(--font-h);
+  border-radius: var(--r-xs);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--gold-hair);
+  color: var(--dim);
+  cursor: pointer;
+  transition: all .16s ease;
+}
+.admin-badge-btn:hover {
+  color: var(--paper);
+  border-color: var(--gold);
+  background: var(--gold-wash);
+}
+
 .articles-cats {
   display: flex;
   gap: 6px;
@@ -1060,20 +1100,20 @@ select.input {
   border: 1px solid var(--gold-hair);
   background: var(--surface-card);
   color: var(--dim);
-  padding: 6px 14px;
+  padding: 7px 16px;
   border-radius: var(--r-xs);
-  font: 600 13.5px/1.3 var(--font-h);
+  font: 500 14px/1.3 var(--font-h);
   cursor: pointer;
   white-space: nowrap;
   transition: all .16s ease;
 }
 .cat-btn:hover { border-color: var(--gold); color: var(--paper); background: var(--gold-wash); }
 .cat-btn.active {
-  background: linear-gradient(135deg, var(--red) 0%, var(--red-deep) 100%);
-  border-color: transparent;
-  color: #fff;
-  font-weight: 700;
-  box-shadow: 0 3px 10px rgba(181, 31, 38, 0.45);
+  background: var(--red);
+  border-color: var(--red-deep);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(158, 32, 39, 0.35);
 }
 
 .articles-grid {
@@ -1094,22 +1134,23 @@ select.input {
   height: 100%;
   min-height: 380px;
   background: var(--surface-card);
-  border: 0;
+  border: 1px solid var(--gold-hair);
   border-top: 3px solid var(--gold);
   border-radius: var(--r-sm);
   overflow: hidden;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(0,0,0,.18);
+  box-shadow: 0 2px 10px rgba(0,0,0,.15);
   transition: transform .2s ease, box-shadow .2s ease;
 }
 .art-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 24px rgba(0,0,0,.35);
+  box-shadow: 0 8px 24px rgba(0,0,0,.3);
 }
 .art-thumb {
   position: relative;
   width: 100%;
   height: 180px;
+  aspect-ratio: 16/9;
   background: var(--ink-3);
   overflow: hidden;
   flex: none;
@@ -1134,7 +1175,7 @@ select.input {
 }
 .art-badge {
   position: absolute; top: 10px; left: 10px;
-  background: rgba(17, 11, 23, 0.92); color: var(--gold-ink);
+  background: rgba(33, 26, 32, 0.88); color: var(--gold-ink);
   font: 700 11.5px/1 var(--font-h); letter-spacing: .06em; padding: 4px 8px;
   border-radius: var(--r-xs); border: 1px solid var(--gold); backdrop-filter: blur(6px);
   z-index: 2;
@@ -1147,10 +1188,10 @@ select.input {
   justify-content: space-between;
 }
 .art-title {
-  font: 700 17px/1.35 var(--font-h);
+  font: 600 18.5px/1.45 var(--font-h);
   color: var(--paper);
   margin: 0;
-  min-height: 46px;
+  min-height: 48px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
@@ -1158,11 +1199,11 @@ select.input {
   overflow: hidden;
 }
 .art-desc {
-  font-size: 14px;
+  font-size: 14.5px;
   color: var(--dim);
-  line-height: 1.55;
-  margin: 6px 0 10px;
-  min-height: 44px;
+  line-height: 1.65;
+  margin: 6px 0 12px;
+  min-height: 46px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
@@ -1176,10 +1217,20 @@ select.input {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 13px;
+  font-size: 13.5px;
   color: var(--dimmer);
 }
-.art-read-btn { display: inline-flex; align-items: center; gap: 4px; color: var(--red-text); font: 700 13.5px/1 var(--font-h); }
+.art-read-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--red-text);
+  font: 600 14px/1 var(--font-h);
+  transition: color .18s ease;
+}
+.art-read-btn svg { transition: transform .18s ease; }
+.art-card:hover .art-read-btn { color: var(--red); }
+.art-card:hover .art-read-btn svg { transform: translateX(3px); }
 
 /* ── Courses Grid (Uniform Equal Sizes) ─────────────── */
 .courses-grid {
@@ -1419,8 +1470,8 @@ select.input {
 
 /* ── Structured Archival Site Footer ─────────────────── */
 .site-foot {
-  margin-top: 64px;
-  padding: 56px 0 28px;
+  margin-top: 48px;
+  padding: 48px 0 28px;
   background: #08050b;
   border-top: 1.5px solid var(--gold-deep);
   color: var(--text);
