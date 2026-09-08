@@ -1247,6 +1247,10 @@ select.input {
 @media (max-width: 639px) {
   .lesson-grid { grid-template-columns: 1fr; gap: 12px; }
 }
+a.action-card, a.art-card, a.row, a.compass-badge {
+  text-decoration: none;
+  color: inherit;
+}
 .row {
   display: flex;
   gap: 14px;

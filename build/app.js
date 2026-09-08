@@ -168,6 +168,8 @@
     teacher: ['ประวัติครู', 'บรมครูโหรพัฒนา พัฒนศิริ'],
     me: ['ความคืบหน้า', 'บันทึกการเรียนและดวงชะตา'],
     search: ['ค้นหา', 'ค้นหาตำรา ดาว ราศี และบทความ'],
+    article: ['บทความ', 'บทความและเกร็ดวิชาโหราศาสตร์'],
+    reader: ['บทเรียน', 'ตำราโหราศาสตร์ไทย ๙ บท'],
     artadmin: ['ระบบหลังบ้าน', 'จัดการบทความ']
   };
   var TABS_DEFAULT = [
@@ -351,7 +353,7 @@
   function tabOf(screen) {
     if (screen === 'home') return 'home';
     if (screen === 'lessons' || screen === 'reader') return 'lessons';
-    if (screen === 'articles') return 'articles';
+    if (screen === 'articles' || screen === 'article') return 'articles';
     if (screen === 'artadmin') return isAdminAuth ? 'artadmin' : 'articles';
     if (screen === 'chart') return 'chart';
     if (screen === 'calendar' || screen === 'booking') return 'ruek';
@@ -362,9 +364,48 @@
   }
 
   function detectScreen() {
-    var dataPage = document.body && document.body.dataset && document.body.dataset.page;
-    if (dataPage) return dataPage;
     var p = (location.pathname || '').toLowerCase();
+
+    // 1. Detect individual lesson pages: lesson-1.html ... lesson-9.html
+    var lessonMatch = p.match(/lesson-?([1-9])\.html/);
+    if (lessonMatch) {
+      S.lesson = parseInt(lessonMatch[1], 10) - 1;
+      return 'reader';
+    }
+
+    // 2. Detect individual article pages: article-1.html ... article-99.html
+    var artMatch = p.match(/article-?([0-9]+)\.html/);
+    if (artMatch) {
+      S.activeArticleId = 'art-' + artMatch[1];
+      return 'article';
+    }
+
+    // 3. Detect dataset.page from <body>
+    var dataPage = document.body && document.body.dataset && document.body.dataset.page;
+    if (dataPage) {
+      if (dataPage.indexOf('lesson-') === 0) {
+        S.lesson = parseInt(dataPage.replace('lesson-', ''), 10) - 1;
+        return 'reader';
+      }
+      if (dataPage.indexOf('article-') === 0) {
+        S.activeArticleId = 'art-' + dataPage.replace('article-', '');
+        return 'article';
+      }
+      return dataPage;
+    }
+
+    // 4. Detect URL query parameters (?lesson=1, ?article=art-1)
+    var qLesson = (new URLSearchParams(location.search).get('lesson'));
+    if (qLesson) {
+      S.lesson = parseInt(qLesson, 10) - 1;
+      return 'reader';
+    }
+    var qArt = (new URLSearchParams(location.search).get('article')) || (new URLSearchParams(location.search).get('art'));
+    if (qArt) {
+      S.activeArticleId = qArt.indexOf('art-') === 0 ? qArt : ('art-' + qArt);
+      return 'article';
+    }
+
     if (p.indexOf('lessons') >= 0) return 'lessons';
     if (p.indexOf('articles') >= 0) return 'articles';
     if (p.indexOf('chart') >= 0) return 'chart';
@@ -372,6 +413,7 @@
     if (p.indexOf('courses') >= 0) return 'courses';
     if (p.indexOf('teacher') >= 0) return 'teacher';
     if (p.indexOf('me') >= 0) return 'me';
+
     var qParam = (new URLSearchParams(location.search).get('screen')) || (new URLSearchParams(location.search).get('page'));
     if (qParam) return qParam;
     return 'home';
@@ -382,7 +424,6 @@
   S.screen = initialScreen;
   S.tab = tabOf(initialScreen);
   S.stack = [];
-  S.activeArticleId = null;
   S.showAdminLogin = false;
   S.editingArticle = null;
   var navDir = 'tab';
@@ -395,6 +436,10 @@
   function back() {
     if (S.stack.length > 0) {
       navDir = 'back'; S.screen = S.stack.pop(); S.tab = tabOf(S.screen); render();
+    } else if (S.screen === 'reader') {
+      location.href = 'lessons.html';
+    } else if (S.screen === 'article') {
+      location.href = 'articles.html';
     } else if (S.screen !== 'home') {
       if (document.referrer && document.referrer.indexOf(location.host) >= 0) {
         history.back();
@@ -1016,12 +1061,13 @@
       var imgNum = i + 1;
       var imgSrc = imgNum <= 8 ? 'assets/site/lesson-' + imgNum + '.jpg' : 'assets/site/lesson-1.jpg';
       var thumbHtml = '<div class="row-thumb"><img src="' + esc(imgSrc) + '" alt="ภาพประกอบบทที่ ' + esc(l.n) + '" loading="lazy"><span class="row-thumb-num">' + esc(l.n) + '</span></div>';
+      var lessonHref = 'lesson-' + (i + 1) + '.html';
 
-      return '<div class="row' + (now ? ' is-now' : '') + '" data-act="lesson" data-i="' + i + '" role="button" tabindex="0" aria-label="บทเรียนที่ ' + esc(l.n) + ' ' + esc(l.t) + '">' +
+      return '<a class="row' + (now ? ' is-now' : '') + '" href="' + lessonHref + '" data-act="lesson" data-i="' + i + '" aria-label="บทเรียนที่ ' + esc(l.n) + ' ' + esc(l.t) + '">' +
         thumbHtml + '<div class="row-main">' +
         '<div class="row-title">' + esc(l.t) + '</div><div class="row-sub">' + esc(l.d) + '</div>' +
         (showTags ? '<div class="chips"><span class="tag tag-neutral">' + esc(l.mins) + '</span><span class="tag tag-outline">' + l.secs.length + ' หัวข้อ</span></div>' : '') +
-        '</div>' + (done || now ? '<div class="row-state ' + (done ? 'done' : 'now') + '">' + (done ? 'เรียนแล้ว' : 'เรียนต่อ') + '</div>' : '') + '</div>';
+        '</div>' + (done || now ? '<div class="row-state ' + (done ? 'done' : 'now') + '">' + (done ? 'เรียนแล้ว' : 'เรียนต่อ') + '</div>' : '') + '</a>';
     }).join('');
   }
   /* Wrapped so wide viewports can lay the ladder out in columns. */
@@ -1046,9 +1092,9 @@
       '<span class="compass-dot" aria-hidden="true">•</span>' +
       '<span class="compass-colors">สีมงคล: <b>' + esc(TODAY.goodColor) + '</b> <span class="compass-avoid">/ เลี่ยง: ' + esc(TODAY.avoidColor) + '</span></span>' +
       '</div>' +
-      '<button class="compass-badge" data-act="tab" data-tab="ruek" data-screen="calendar" aria-label="เปิดปฏิทินฤกษ์มงคล: ' + esc(TODAY.ruek) + '">' +
+      '<a class="compass-badge" href="ruek.html" aria-label="เปิดปฏิทินฤกษ์มงคล: ' + esc(TODAY.ruek) + '">' +
       '<span>' + esc(TODAY.ruek) + '</span> <span class="compass-arrow" aria-hidden="true">→</span>' +
-      '</button>' +
+      '</a>' +
       '</div>' +
       '</aside>' +
 
@@ -1059,8 +1105,8 @@
       '<div class="orn"><i></i></div>' +
       '<p class="hero-desc">โหราศาสตร์ไทย เพื่อความเข้าใจชีวิต และพัฒนาตนเองอย่างมีสติ ถ่ายทอดวิชาการผูกดวงชะตา วางฤกษ์มงคล และฮวงจุ้ยชั้นสูง ครบถ้วนตามตำราโบราณจารย์</p>' +
       '<div class="hero-actions">' +
-      '<button class="btn btn-primary" data-act="tab" data-tab="lessons" data-screen="lessons">' + ICON.scripture + ' <span>เริ่มศึกษาตำรา ๙ บท</span></button>' +
-      '<button class="btn btn-secondary" data-act="tab" data-tab="chart" data-screen="chart">' + ICON.chart + ' <span>ผูกดวงชะตา</span></button>' +
+      '<a class="btn btn-primary" href="lessons.html">' + ICON.scripture + ' <span>เริ่มศึกษาตำรา ๙ บท</span></a>' +
+      '<a class="btn btn-secondary" href="chart.html">' + ICON.chart + ' <span>ผูกดวงชะตา</span></a>' +
       '</div>' +
       '<div class="hero-trust">' +
       '<span class="hero-trust-item"><span style="color:var(--gold)">✦</span> ถ่ายทอดวิชา ๔๐+ ปี</span>' +
@@ -1078,18 +1124,18 @@
       '<section class="features-section" aria-label="บริการหลัก">' +
       '<div class="sec-title">สารบัญหลักสถาบัน</div>' +
       '<div class="quick-grid-4">' +
-      '<div class="action-card" data-act="tab" data-tab="chart" data-screen="chart" role="button" tabindex="0" aria-label="ผูกดวงชะตาของคุณ">' +
+      '<a class="action-card" href="chart.html" aria-label="ผูกดวงชะตาของคุณ">' +
       '<div class="action-card-icon">' + ICON.chart + '</div><div class="action-card-title">ผูกดวงชะตา</div><p class="action-card-desc">คำนวณลัคนา แผนภูมิจตุโกณและจักรราศี</p>' +
-      '</div>' +
-      '<div class="action-card" data-act="tab" data-tab="ruek" data-screen="calendar" role="button" tabindex="0" aria-label="ปฏิทินฤกษ์มงคล">' +
+      '</a>' +
+      '<a class="action-card" href="ruek.html" aria-label="ปฏิทินฤกษ์มงคล">' +
       '<div class="action-card-icon">' + ICON.calendar + '</div><div class="action-card-title">ปฏิทินฤกษ์</div><p class="action-card-desc">ตรวจฤกษ์มงคล ฤกษ์เจรจา ออกรถ แต่งงาน</p>' +
-      '</div>' +
-      '<div class="action-card" data-act="tab" data-tab="lessons" data-screen="lessons" role="button" tabindex="0" aria-label="ตำราโหราศาสตร์ ๙ บท">' +
+      '</a>' +
+      '<a class="action-card" href="lessons.html" aria-label="ตำราโหราศาสตร์ ๙ บท">' +
       '<div class="action-card-icon">' + ICON.scripture + '</div><div class="action-card-title">ตำรา ๙ บท</div><p class="action-card-desc">หลักสูตรพื้นฐานสู่การพยากรณ์ชั้นสูง</p>' +
-      '</div>' +
-      '<div class="action-card" data-act="go" data-screen="articles" role="button" tabindex="0" aria-label="คลังบทความโหราศาสตร์">' +
+      '</a>' +
+      '<a class="action-card" href="articles.html" aria-label="คลังบทความโหราศาสตร์">' +
       '<div class="action-card-icon">' + ICON.wisdom + '</div><div class="action-card-title">คลังความรู้</div><p class="action-card-desc">บทความและเกร็ดวิชาจากบรมครู</p>' +
-      '</div>' +
+      '</a>' +
       '</div></section>' +
 
       statStrip() +
@@ -1100,7 +1146,7 @@
       ALL_ARTICLES.slice(0, 3).map(function (a) { return articleCard(a); }).join('') +
       '</div>' +
       '<div style="text-align:center;padding:18px var(--s-5) var(--s-4)">' +
-      '<button class="linkish" data-act="go" data-screen="articles">ดูบทความทั้งหมด (' + ALL_ARTICLES.length + ' เรื่อง) →</button>' +
+      '<a class="linkish" href="articles.html">ดูบทความทั้งหมด (' + ALL_ARTICLES.length + ' เรื่อง) →</a>' +
       '</div></section>' +
       '<section class="lessons-featured-section"><h2 class="sec-title">ตำราโหราศาสตร์ทั้ง ๙ บท</h2>' + lessonList(false) + '</section>' +
       testimonials();
@@ -1418,8 +1464,10 @@
     var thumbHtml = hasImg
       ? '<img src="' + esc(a.image) + '" alt="' + esc(a.t) + '" loading="lazy">'
       : '<div class="art-thumb-ph">' + ICON.bookOpen + '</div>';
+    var artNum = (a.id || '').replace('art-', '');
+    var artHref = 'article-' + artNum + '.html';
 
-    return '<article class="art-card" data-act="openart" data-id="' + esc(a.id) + '" role="button" tabindex="0" aria-label="' + esc(a.t) + '">' +
+    return '<a class="art-card" href="' + esc(artHref) + '" data-act="openart" data-id="' + esc(a.id) + '" aria-label="' + esc(a.t) + '">' +
       '<div class="art-thumb">' + thumbHtml +
       (a.cat ? '<span class="art-badge">' + esc(a.cat) + '</span>' : '') +
       '</div>' +
@@ -1429,7 +1477,7 @@
       '<div class="art-meta">' +
       '<span>' + esc(a.meta || a.author || 'ตำราบรมครู') + '</span>' +
       '<span class="art-read-btn">อ่านบทความ ' + ICON.chev + '</span>' +
-      '</div></div></article>';
+      '</div></div></a>';
   }
 
   function articleModal() {
@@ -1508,6 +1556,50 @@
       '<div class="muted" style="font-size:11.5px;margin-top:12px">รหัสผ่านตั้งต้น: <b>1234</b></div>' +
       '</div></div></div>';
   }
+
+  V.article = function () {
+    var a = ALL_ARTICLES.filter(function (x) { return x.id === S.activeArticleId; })[0] || ALL_ARTICLES[0];
+    var isReading = ttsState.isSpeaking && ttsState.activeScope === 'article';
+    var secs = (a && a.secs) || [{ h: 'เนื้อหาบทความ', p: (a && a.d) || '' }];
+    var hasImg = a && a.image && a.image.trim() !== '';
+
+    return '<article class="article-page" style="padding:10px 0 32px">' +
+      (hasImg ? '<div class="art-page-cover" style="margin-bottom:18px;border-radius:var(--r-md);overflow:hidden;border:1px solid var(--gold-hair)"><img src="' + esc(a.image) + '" alt="' + esc(a.t) + '" style="width:100%;max-height:300px;object-fit:cover"></div>' : '') +
+      '<div class="art-page-header">' +
+      (a.cat ? '<span class="tag tag-accent" style="margin-bottom:8px">' + esc(a.cat) + '</span>' : '') +
+      '<h1 style="font:700 24px/1.3 var(--font-h);color:var(--paper);margin:8px 0 10px">' + esc(a.t) + '</h1>' +
+      '<div class="art-page-meta" style="font-size:13.5px;color:var(--dim);margin-bottom:16px;display:flex;flex-wrap:wrap;gap:8px 16px">' +
+      (a.author ? '<span>โดย <b>' + esc(a.author) + '</b></span>' : '') +
+      (a.meta ? '<span>' + esc(a.meta) + '</span>' : '') +
+      '</div></div>' +
+      '<div class="tts-box" style="margin:var(--s-2) 0 var(--s-4)">' +
+      '<div class="tts-header"><div class="tts-info">' +
+      '<span class="tts-icon" aria-hidden="true">' + (isReading ? ICON.speaker : ICON.headphones) + '</span>' +
+      '<div><div class="tts-title">' + (isReading ? 'กำลังอ่านออกเสียงบทความ...' : 'ฟังเสียงอ่านบทความนี้') + '</div>' +
+      '<div class="tts-sub">เสียงสังเคราะห์ธรรมชาติ สบายตาสำหรับผู้ใหญ่</div></div></div>' +
+      '<button class="tts-btn' + (isReading ? ' is-playing' : '') + '" data-act="tts-toggle" data-scope="article" aria-label="' + (isReading ? 'หยุดฟังเสียงอ่านบทความ' : 'เริ่มฟังเสียงอ่านบทความ') + '">' +
+      (isReading
+        ? '<span class="tts-wave"><span></span><span></span><span></span></span><span>' + ICON.pause + ' หยุดฟัง</span>'
+        : '<span>' + ICON.playSolid + '</span><span>ฟังเสียงอ่าน</span>') +
+      '</button></div>' +
+      '<div class="speed-control"><span>ความเร็วเสียง:</span>' +
+      '<div class="speed-buttons" role="group" aria-label="ความเร็วเสียงอ่าน">' +
+      '<button class="speed-btn' + (ttsState.rate === 0.8 ? ' active' : '') + '" data-act="tts-speed" data-speed="0.8" data-scope="article">0.8x ช้าชัด</button>' +
+      '<button class="speed-btn' + (ttsState.rate === 1.0 ? ' active' : '') + '" data-act="tts-speed" data-speed="1.0" data-scope="article">1.0x ปกติ</button>' +
+      '<button class="speed-btn' + (ttsState.rate === 1.2 ? ' active' : '') + '" data-act="tts-speed" data-speed="1.2" data-scope="article">1.2x กระชับ</button>' +
+      '</div></div></div>' +
+      (a.d ? '<div class="art-summary" style="padding:14px 16px;background:var(--gold-wash);border-left:3px solid var(--gold);border-radius:4px;font-size:15px;line-height:1.7;color:var(--paper);margin-bottom:20px">' + esc(a.d) + '</div>' : '') +
+      secs.map(function (s) {
+        return '<section class="art-sec" style="margin-bottom:22px">' +
+          (s.h ? '<h2 style="font:600 19px/1.3 var(--font-h);color:var(--gold-ink);margin-bottom:10px">' + esc(s.h) + '</h2>' : '') +
+          '<p style="font-size:15.5px;line-height:1.8;color:var(--dim);margin:0 0 12px">' + esc(s.p).replace(/\n\n/g, '</p><p style="font-size:15.5px;line-height:1.8;color:var(--dim);margin:0 0 12px">').replace(/\n/g, '<br>') + '</p>' +
+          '</section>';
+      }).join('') +
+      '<div style="margin-top:28px;display:flex;flex-direction:column;gap:10px">' +
+      '<a class="btn btn-secondary btn-block" href="articles.html">← กลับไปคลังบทความทั้งหมด</a>' +
+      '<a class="btn btn-primary btn-block" href="lessons.html">ศึกษาต่อในตำราโหราศาสตร์ ๙ บท</a>' +
+      '</div></article>';
+  };
 
   V.articles = function () {
     var cats = ['ทั้งหมด'];
@@ -1877,6 +1969,10 @@
     var screenTitle = S.screen === 'home' ? 'สถาบันโหรพัฒนา' : (head[1] || head[0]);
     if (S.screen === 'reader' && LESSONS[S.lesson]) {
       screenTitle = 'บทที่ ' + LESSONS[S.lesson].n + ' · ' + LESSONS[S.lesson].t;
+    }
+    if (S.screen === 'article') {
+      var curArt = ALL_ARTICLES.filter(function (x) { return x.id === S.activeArticleId; })[0];
+      if (curArt) screenTitle = curArt.t;
     }
 
     var tabIcons = {
