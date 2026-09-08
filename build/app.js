@@ -1988,20 +1988,16 @@
     };
 
     var html = '<div class="' + appClass + '">' +
-      '<header class="miniapp-bar">' +
-      '<div class="miniapp-bar-inner">' +
-      '<div class="miniapp-left">' +
-      (isSubScreen
-        ? '<button class="miniapp-back-btn" data-act="back" aria-label="ย้อนกลับ">' + ICON.back + '</button>'
-        : '<img class="miniapp-logo" src="logo.png" width="30" height="30" alt="ตราบรมครูโหรพัฒนา">') +
-      '<div class="miniapp-title-wrap">' +
-      '<span class="miniapp-title">' + esc(screenTitle) + '</span>' +
-      '</div></div>' +
-      '<div class="miniapp-right">' +
+      '<div class="top-features-bar">' +
+      '<div class="top-features-inner">' +
+      '<div class="top-features-left">' +
+      (isSubScreen ? '<button class="miniapp-back-btn" data-act="back" aria-label="ย้อนกลับ">' + ICON.back + '</button>' : '') +
+      '</div>' +
+      '<div class="top-features-right">' +
       '<button class="icon-btn search-btn" data-act="go" data-screen="search" aria-label="ค้นหา" title="ค้นหา">' + ICON.search + '</button>' +
       fontControlHtml +
       themeControlHtml +
-      '</div></div></header>' +
+      '</div></div></div>' +
       '<main id="main-content" class="app-main" tabindex="-1">' +
       '<div class="main-container">' + (V[S.screen] || V.home)() + '</div>' +
       '</main>' +
