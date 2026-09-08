@@ -63,8 +63,158 @@
 }
 
 /* ── Senior / Elderly Font Scaling ── */
-html.font-md, body.font-md, .app.font-md { --font-scale: 1.2; }
-html.font-lg, body.font-lg, .app.font-lg { --font-scale: 1.4; }
+html.font-md, body.font-md, .app.font-md { --font-scale: 1.18; }
+html.font-lg, body.font-lg, .app.font-lg { --font-scale: 1.36; }
+
+/* ── Universal Typography Scaling Engine ── */
+body, p, .p {
+  font-size: calc(17px * var(--font-scale));
+}
+.hero-desc {
+  font-size: calc(16.5px * var(--font-scale)) !important;
+}
+.hero-title-sub {
+  font-size: calc(19px * var(--font-scale)) !important;
+}
+.hero-title-main {
+  font-size: calc(clamp(38px, 4.2vw, 54px) * var(--font-scale)) !important;
+}
+.kicker, .hero-content .kicker, .articles-toolbar .kicker {
+  font-size: calc(13px * var(--font-scale)) !important;
+}
+.sec-title, .page-main-heading {
+  font-size: calc(20px * var(--font-scale)) !important;
+}
+.row-title {
+  font-size: calc(16.5px * var(--font-scale)) !important;
+}
+.row-sub {
+  font-size: calc(13.5px * var(--font-scale)) !important;
+}
+.row-state {
+  font-size: calc(12.5px * var(--font-scale)) !important;
+}
+.art-title {
+  font-size: calc(18.5px * var(--font-scale)) !important;
+}
+.art-desc {
+  font-size: calc(14.5px * var(--font-scale)) !important;
+}
+.art-meta {
+  font-size: calc(13.5px * var(--font-scale)) !important;
+}
+.action-card-title {
+  font-size: calc(17px * var(--font-scale)) !important;
+}
+.action-card-desc {
+  font-size: calc(13.5px * var(--font-scale)) !important;
+}
+.course-card .card-title, .course-card h3 {
+  font-size: calc(18.5px * var(--font-scale)) !important;
+}
+.course-card p, .course-card .card-sub {
+  font-size: calc(14.5px * var(--font-scale)) !important;
+}
+.course-meta {
+  font-size: calc(13.5px * var(--font-scale)) !important;
+}
+.compass-inner, .compass-colors, .compass-score-text {
+  font-size: calc(14px * var(--font-scale)) !important;
+}
+.compass-date {
+  font-size: calc(14.5px * var(--font-scale)) !important;
+}
+.compass-badge {
+  font-size: calc(13px * var(--font-scale)) !important;
+}
+.desktop-nav-link {
+  font-size: calc(15px * var(--font-scale)) !important;
+}
+.mobile-tab {
+  font-size: calc(12.5px * var(--font-scale)) !important;
+}
+.btn, .btn-primary, .btn-secondary, .linkish {
+  font-size: calc(15px * var(--font-scale)) !important;
+}
+.hero-trust, .hero-trust-item {
+  font-size: calc(13.5px * var(--font-scale)) !important;
+}
+.quote blockquote {
+  font-size: calc(15.5px * var(--font-scale)) !important;
+}
+.quote figcaption {
+  font-size: calc(13.5px * var(--font-scale)) !important;
+}
+.stat-n {
+  font-size: calc(30px * var(--font-scale)) !important;
+}
+.stat-k {
+  font-size: calc(14px * var(--font-scale)) !important;
+}
+.hon-t {
+  font-size: calc(16.5px * var(--font-scale)) !important;
+}
+.hon-by {
+  font-size: calc(13.5px * var(--font-scale)) !important;
+}
+.reader-body, .reader-p, .reader-sec p {
+  font-size: calc(18px * var(--font-scale)) !important;
+  line-height: 1.8 !important;
+}
+.reader-sec h3 {
+  font-size: calc(20px * var(--font-scale)) !important;
+}
+.tts-title {
+  font-size: calc(14.5px * var(--font-scale)) !important;
+}
+.tts-sub {
+  font-size: calc(12.5px * var(--font-scale)) !important;
+}
+.art-modal-title {
+  font-size: calc(26px * var(--font-scale)) !important;
+}
+.art-modal-summary {
+  font-size: calc(16.5px * var(--font-scale)) !important;
+}
+.art-modal-sec p {
+  font-size: calc(17px * var(--font-scale)) !important;
+}
+.cal-dows {
+  font-size: calc(13px * var(--font-scale)) !important;
+}
+.cal-day {
+  font-size: calc(14px * var(--font-scale)) !important;
+}
+.table th, .table td {
+  font-size: calc(14.5px * var(--font-scale)) !important;
+}
+.field > span {
+  font-size: calc(13.5px * var(--font-scale)) !important;
+}
+.input, .field input, .field select, .field textarea {
+  font-size: calc(16px * var(--font-scale)) !important;
+}
+.tag, .chip, .chips {
+  font-size: calc(12.5px * var(--font-scale)) !important;
+}
+.sf-brand-title {
+  font-size: calc(18.5px * var(--font-scale)) !important;
+}
+.sf-brand-sub {
+  font-size: calc(13.5px * var(--font-scale)) !important;
+}
+.sf-desc {
+  font-size: calc(14.5px * var(--font-scale)) !important;
+}
+.sf-heading {
+  font-size: calc(16px * var(--font-scale)) !important;
+}
+.sf-link, .sf-contact-item {
+  font-size: calc(14px * var(--font-scale)) !important;
+}
+.sf-copy, .sf-tagline {
+  font-size: calc(13px * var(--font-scale)) !important;
+}
 
 /* ── Reset & Global Base (WCAG 2.4.11 Scroll Padding) ── */
 *, *::before, *::after { box-sizing: border-box; }
@@ -74,10 +224,14 @@ html, body {
   padding: 0;
   scroll-padding-top: 78px;
   scroll-padding-bottom: 86px;
+  overflow-x: clip;
 }
 body {
   color: var(--text);
-  font: 400 17px/1.75 var(--font-b);
+  font-family: var(--font-b);
+  font-weight: 400;
+  font-size: calc(17px * var(--font-scale));
+  line-height: 1.75;
   -webkit-font-smoothing: antialiased;
   background-color: var(--bg);
   background-image:
@@ -144,6 +298,7 @@ img, picture, svg, video { display: block; max-width: 100%; height: auto; }
   position: relative;
   background: var(--ink);
   font-size: calc(17px * var(--font-scale));
+  overflow-x: clip;
 }
 .app-main {
   flex: 1;
@@ -918,12 +1073,12 @@ select.input {
 /* ── Quick Action Grid (Uniform Equal Sizes) ────────── */
 .quick-grid-4 {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
   margin: 16px 0 36px;
 }
 @media (max-width: 1023px) {
-  .quick-grid-4 { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .quick-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 }
 @media (max-width: 639px) {
   .quick-grid-4 { grid-template-columns: 1fr; gap: 12px; }
@@ -937,6 +1092,7 @@ select.input {
   padding: 18px 16px;
   height: 100%;
   min-height: 140px;
+  min-width: 0;
   background: var(--surface-card);
   border: 0;
   border-top: 2.5px solid var(--gold);
@@ -968,12 +1124,12 @@ select.input {
 /* ── Lessons Grid & Card Structure (Uniform Equal Heights) ─ */
 .lesson-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
   margin-bottom: 36px;
 }
 @media (max-width: 1023px) {
-  .lesson-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .lesson-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 }
 @media (max-width: 639px) {
   .lesson-grid { grid-template-columns: 1fr; gap: 12px; }
@@ -985,6 +1141,7 @@ select.input {
   padding: 14px 16px;
   height: 100%;
   min-height: 104px;
+  min-width: 0;
   background: var(--surface-card);
   border: 0;
   border-left: 3px solid transparent;
@@ -1030,6 +1187,9 @@ select.input {
   border-radius: var(--r-xs);
   text-transform: uppercase;
   flex: none;
+}
+.row-state:empty {
+  display: none;
 }
 .row-state.now {
   background: var(--red);
@@ -1118,12 +1278,12 @@ select.input {
 
 .articles-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 20px;
   margin-bottom: 36px;
 }
 @media (max-width: 1023px) {
-  .articles-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .articles-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 }
 @media (max-width: 639px) {
   .articles-grid { grid-template-columns: 1fr; gap: 14px; }
@@ -1133,6 +1293,7 @@ select.input {
   flex-direction: column;
   height: 100%;
   min-height: 380px;
+  min-width: 0;
   background: var(--surface-card);
   border: 1px solid var(--gold-hair);
   border-top: 3px solid var(--gold);
@@ -1235,12 +1396,12 @@ select.input {
 /* ── Courses Grid (Uniform Equal Sizes) ─────────────── */
 .courses-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 20px;
   margin: 20px 0 36px;
 }
 @media (max-width: 1023px) {
-  .courses-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .courses-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 }
 @media (max-width: 639px) {
   .courses-grid { grid-template-columns: 1fr; gap: 14px; }
@@ -1253,6 +1414,7 @@ select.input {
   border-radius: var(--r-sm);
   display: flex;
   flex-direction: column;
+  min-width: 0;
   box-shadow: 0 4px 14px rgba(0,0,0,.18);
   transition: transform .2s ease, box-shadow .2s ease;
 }
@@ -1455,7 +1617,7 @@ select.input {
 .stat-k { margin-top: 4px; font-size: 14px; color: var(--dim); font-weight: 600; }
 
 .quotes {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 32px;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-bottom: 32px;
 }
 @media (max-width: 1023px) {
   .quotes { grid-template-columns: 1fr; gap: 14px; }
@@ -1478,13 +1640,13 @@ select.input {
 }
 .sf-grid {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr);
   gap: 40px;
   padding-bottom: 36px;
   border-bottom: 1px solid var(--gold-hair);
 }
 @media (max-width: 1023px) {
-  .sf-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+  .sf-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
 }
 @media (max-width: 639px) {
   .sf-grid { grid-template-columns: 1fr; gap: 24px; }

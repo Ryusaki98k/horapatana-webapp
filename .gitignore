@@ -1,6 +1,9 @@
 # Working copies kept while the design direction was being decided
 build-handoff/
 build-mine-backup/
+build_backup*/
+build/.agents/
+build/AI Slop/
 
 # Claude Design canvas scaffolding — not part of the shipped app
 _ds/

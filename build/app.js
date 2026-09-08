@@ -994,7 +994,7 @@
         thumbHtml + '<div class="row-main">' +
         '<div class="row-title">' + esc(l.t) + '</div><div class="row-sub">' + esc(l.d) + '</div>' +
         (showTags ? '<div class="chips"><span class="tag tag-neutral">' + esc(l.mins) + '</span><span class="tag tag-outline">' + l.secs.length + ' หัวข้อ</span></div>' : '') +
-        '</div><div class="row-state ' + (done ? 'done' : 'now') + '">' + (done ? 'เรียนแล้ว' : (now ? 'เรียนต่อ' : '')) + '</div></div>';
+        '</div>' + (done || now ? '<div class="row-state ' + (done ? 'done' : 'now') + '">' + (done ? 'เรียนแล้ว' : 'เรียนต่อ') + '</div>' : '') + '</div>';
     }).join('');
   }
   /* Wrapped so wide viewports can lay the ladder out in columns. */
