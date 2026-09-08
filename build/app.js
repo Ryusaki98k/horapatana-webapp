@@ -355,11 +355,30 @@
     if (screen === 'artadmin') return isAdminAuth ? 'artadmin' : 'articles';
     if (screen === 'chart') return 'chart';
     if (screen === 'calendar' || screen === 'booking') return 'ruek';
-    return 'me';
+    if (screen === 'courses') return 'courses';
+    if (screen === 'teacher') return 'teacher';
+    if (screen === 'me') return 'me';
+    return 'home';
   }
 
-  /* Always default to 'home' on fresh load or reload, unless explicitly overridden in URL */
-  var initialScreen = (new URLSearchParams(location.search).get('screen')) || 'home';
+  function detectScreen() {
+    var dataPage = document.body && document.body.dataset && document.body.dataset.page;
+    if (dataPage) return dataPage;
+    var p = (location.pathname || '').toLowerCase();
+    if (p.indexOf('lessons') >= 0) return 'lessons';
+    if (p.indexOf('articles') >= 0) return 'articles';
+    if (p.indexOf('chart') >= 0) return 'chart';
+    if (p.indexOf('ruek') >= 0 || p.indexOf('calendar') >= 0) return 'calendar';
+    if (p.indexOf('courses') >= 0) return 'courses';
+    if (p.indexOf('teacher') >= 0) return 'teacher';
+    if (p.indexOf('me') >= 0) return 'me';
+    var qParam = (new URLSearchParams(location.search).get('screen')) || (new URLSearchParams(location.search).get('page'));
+    if (qParam) return qParam;
+    return 'home';
+  }
+
+  /* Detect screen from page attribute, pathname, or URL query param */
+  var initialScreen = detectScreen();
   S.screen = initialScreen;
   S.tab = tabOf(initialScreen);
   S.stack = [];
@@ -374,7 +393,15 @@
     navDir = 'fwd'; S.screen = screen; S.tab = tabOf(screen); render();
   }
   function back() {
-    navDir = 'back'; S.screen = S.stack.pop() || 'home'; S.tab = tabOf(S.screen); render();
+    if (S.stack.length > 0) {
+      navDir = 'back'; S.screen = S.stack.pop(); S.tab = tabOf(S.screen); render();
+    } else if (S.screen !== 'home') {
+      if (document.referrer && document.referrer.indexOf(location.host) >= 0) {
+        history.back();
+      } else {
+        location.href = 'index.html';
+      }
+    }
   }
   function pickTab(tab, screen) { navDir = 'tab'; S.tab = tab; S.screen = screen; S.stack = []; render(); }
   
@@ -1882,11 +1909,7 @@
       '<main id="main-content" class="app-main" tabindex="-1">' +
       '<div class="main-container">' + (V[S.screen] || V.home)() + '</div>' +
       '</main>' +
-      '<nav class="mobile-tabs" aria-label="เมนูหลัก">' + activeTabs.map(function (t) {
-        var tabIcon = tabIcons[t[0]] || ICON.star;
-        return '<button class="mobile-tab' + (S.tab === t[0] ? ' is-active' : '') + '" ' + (S.tab === t[0] ? 'aria-current="page" ' : '') +
-          'data-act="tab" data-tab="' + t[0] + '" data-screen="' + t[2] + '"><span class="tab-icon">' + tabIcon + '</span><span>' + t[1] + '</span></button>';
-      }).join('') + '</nav>' + articleModal() + adminLoginModal() + planetInspectorSheet() + '</div>';
+      articleModal() + adminLoginModal() + planetInspectorSheet() + '</div>';
     var root = document.getElementById('app');
     var scroll = root.querySelector('.app-main');
     var y = scroll ? scroll.scrollTop : 0;

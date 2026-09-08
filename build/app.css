@@ -300,17 +300,19 @@ img, picture, svg, video { display: block; max-width: 100%; height: auto; }
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding-bottom: calc(76px + var(--safe-bottom));
+  padding-bottom: calc(24px + var(--safe-bottom));
 }
 .main-container {
   padding-top: 14px;
   flex: 1;
 }
 
-/* ── Legacy Header & Footer Hidden for Mobile Mini App ── */
+/* ── Legacy Header, Footer & Mobile Tabs Hidden for Mobile Mini App ── */
 .app-header,
 .site-foot,
-.fab-line {
+.fab-line,
+.mobile-tabs,
+.desktop-nav {
   display: none !important;
 }
 
