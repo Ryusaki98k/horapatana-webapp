@@ -1846,37 +1846,47 @@
       '</div>';
 
     var appClass = 'app' + (S.fontSize === 'md' ? ' font-md' : (S.fontSize === 'lg' ? ' font-lg' : ''));
+    var isSubScreen = S.stack.length > 0 || S.screen !== 'home';
+    var screenTitle = S.screen === 'home' ? 'สถาบันโหรพัฒนา' : (head[1] || head[0]);
+    if (S.screen === 'reader' && LESSONS[S.lesson]) {
+      screenTitle = 'บทที่ ' + LESSONS[S.lesson].n + ' · ' + LESSONS[S.lesson].t;
+    }
+
+    var tabIcons = {
+      home: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+      lessons: ICON.scripture,
+      articles: ICON.wisdom,
+      chart: ICON.chart,
+      ruek: ICON.calendar,
+      courses: ICON.school,
+      teacher: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+      me: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.662V19a2 2 0 012-2h6a2 2 0 012 2v1.662"/></svg>',
+      artadmin: ICON.gear
+    };
+
     var html = '<div class="' + appClass + '">' +
-      '<header class="app-header">' +
-      '<div class="app-header-inner">' +
-      '<div class="corner-loader" id="corner-loader" aria-hidden="true"><div class="corner-spinner"></div></div>' +
-      '<div class="app-brand-area">' +
-      (S.stack.length ? '<button class="icon-btn back" data-act="back" aria-label="ย้อนกลับ">' + ICON.back + '</button>' : '') +
-      '<div class="app-brand" role="button" tabindex="0" aria-label="กลับหน้าแรก" data-act="tab" data-tab="home" data-screen="home">' +
-      '<img class="app-logo" src="logo.png" width="40" height="40" alt="ตราบรมครูโหรพัฒนา">' +
-      '<div class="brand-text">' +
-      '<span class="brand-kicker">สถาบันโหราศาสตร์ไทย</span>' +
-      '<span class="brand-title">โหรพัฒนา <em>พัฒนศิริ</em></span>' +
-      '</div></div></div>' +
-      '<nav class="desktop-nav" aria-label="เมนูนำทางหลัก">' +
-      activeTabs.map(function (t) {
-        return '<button class="desktop-nav-link' + (S.tab === t[0] ? ' is-active' : '') + '" data-act="tab" data-tab="' + t[0] + '" data-screen="' + t[2] + '">' +
-          t[1] + '</button>';
-      }).join('') +
-      '</nav>' +
-      '<div class="header-actions">' +
-      themeControlHtml +
-      fontControlHtml +
+      '<header class="miniapp-bar">' +
+      '<div class="miniapp-bar-inner">' +
+      '<div class="miniapp-left">' +
+      (isSubScreen
+        ? '<button class="miniapp-back-btn" data-act="back" aria-label="ย้อนกลับ">' + ICON.back + '</button>'
+        : '<img class="miniapp-logo" src="logo.png" width="30" height="30" alt="ตราบรมครูโหรพัฒนา">') +
+      '<div class="miniapp-title-wrap">' +
+      '<span class="miniapp-title">' + esc(screenTitle) + '</span>' +
+      '</div></div>' +
+      '<div class="miniapp-right">' +
       '<button class="icon-btn search-btn" data-act="go" data-screen="search" aria-label="ค้นหา" title="ค้นหา">' + ICON.search + '</button>' +
+      fontControlHtml +
+      themeControlHtml +
       '</div></div></header>' +
       '<main id="main-content" class="app-main" tabindex="-1">' +
       '<div class="main-container">' + (V[S.screen] || V.home)() + '</div>' +
-      siteFooter() +
       '</main>' +
-      '<nav class="mobile-tabs" aria-label="เมนูมือถือ">' + activeTabs.map(function (t) {
+      '<nav class="mobile-tabs" aria-label="เมนูหลัก">' + activeTabs.map(function (t) {
+        var tabIcon = tabIcons[t[0]] || ICON.star;
         return '<button class="mobile-tab' + (S.tab === t[0] ? ' is-active' : '') + '" ' + (S.tab === t[0] ? 'aria-current="page" ' : '') +
-          'data-act="tab" data-tab="' + t[0] + '" data-screen="' + t[2] + '"><span class="dot" aria-hidden="true"></span><span>' + t[1] + '</span></button>';
-      }).join('') + '</nav>' + lineFab() + articleModal() + adminLoginModal() + planetInspectorSheet() + '</div>';
+          'data-act="tab" data-tab="' + t[0] + '" data-screen="' + t[2] + '"><span class="tab-icon">' + tabIcon + '</span><span>' + t[1] + '</span></button>';
+      }).join('') + '</nav>' + articleModal() + adminLoginModal() + planetInspectorSheet() + '</div>';
     var root = document.getElementById('app');
     var scroll = root.querySelector('.app-main');
     var y = scroll ? scroll.scrollTop : 0;

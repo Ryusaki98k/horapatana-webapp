@@ -275,17 +275,12 @@ img, picture, svg, video { display: block; max-width: 100%; height: auto; }
 .main-container,
 .app-header-inner,
 .sf-container {
-  width: min(1280px, calc(100% - 48px));
+  width: min(720px, calc(100% - 24px));
   margin-inline: auto;
-}
-@media (max-width: 1023px) {
-  .container, .main-container, .app-header-inner, .sf-container {
-    width: calc(100% - 32px);
-  }
 }
 @media (max-width: 767px) {
   .container, .main-container, .app-header-inner, .sf-container {
-    width: calc(100% - 24px);
+    width: calc(100% - 20px);
   }
 }
 
@@ -305,21 +300,131 @@ img, picture, svg, video { display: block; max-width: 100%; height: auto; }
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding-bottom: 48px;
+  padding-bottom: calc(76px + var(--safe-bottom));
 }
 .main-container {
-  padding-top: 24px;
+  padding-top: 14px;
   flex: 1;
 }
 
-/* ── Header (Deep Brand Plum Sanctuary Background) ───── */
-.app-header {
+/* ── Legacy Header & Footer Hidden for Mobile Mini App ── */
+.app-header,
+.site-foot,
+.fab-line {
+  display: none !important;
+}
+
+/* ── Mini App Bar (Top Navigation for LINE OA / LIFF) ── */
+.miniapp-bar {
   position: sticky;
   top: 0;
-  z-index: 80;
-  background: #211A20;
+  z-index: 90;
+  background: rgba(33, 26, 32, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(201, 162, 74, 0.25);
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
+  padding-top: var(--safe-top);
+}
+.miniapp-bar-inner {
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  gap: 8px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+.miniapp-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+.miniapp-logo {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  flex: none;
+  border: 1px solid var(--gold);
+}
+.miniapp-back-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--gold-hair);
+  color: var(--gold-ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex: none;
+  transition: all 0.16s ease;
+  padding: 0;
+}
+.miniapp-back-btn:hover, .miniapp-back-btn:active {
+  background: rgba(201, 162, 74, 0.2);
+  color: #fff;
+  border-color: var(--gold);
+}
+.miniapp-title-wrap {
+  min-width: 0;
+  flex: 1;
+}
+.miniapp-title {
+  font: 700 15px/1.3 var(--font-h);
+  color: var(--paper);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+.miniapp-right {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex: none;
+}
+.miniapp-right .search-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-xs);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(201, 162, 74, 0.25);
+  color: #C9A24A;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all .16s ease;
+}
+.miniapp-right .search-btn:hover {
+  background: rgba(201, 162, 74, 0.15);
+  border-color: #C9A24A;
+  color: #FFFFFF;
+}
+
+/* Light Theme (Mode Sand) for Miniapp Bar */
+html.mode-sand .miniapp-bar, body.mode-sand .miniapp-bar {
+  background: rgba(237, 228, 214, 0.96);
+  border-bottom: 1px solid #D2C3A7;
+  box-shadow: 0 2px 10px rgba(41, 35, 31, 0.08);
+}
+html.mode-sand .miniapp-title, body.mode-sand .miniapp-title {
+  color: #29231F;
+}
+html.mode-sand .miniapp-back-btn, body.mode-sand .miniapp-back-btn {
+  background: rgba(154, 109, 22, 0.08);
+  border-color: #D2C3A7;
+  color: #7A550F;
+}
+html.mode-sand .miniapp-right .search-btn, body.mode-sand .miniapp-right .search-btn {
+  background: rgba(154, 109, 22, 0.08);
+  border-color: #D2C3A7;
+  color: #7A550F;
 }
 .app-header-inner {
   height: 68px;
@@ -467,57 +572,63 @@ img, picture, svg, video { display: block; max-width: 100%; height: auto; }
 }
 @keyframes corner-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-/* ── Mobile Tab Bar (Visible on < 1024px) ── */
+/* ── Mobile Tab Bar (Always Active for Mini App) ── */
+.desktop-nav { display: none !important; }
 .mobile-tabs {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 85;
+  display: flex;
+  overflow-x: auto;
+  background: rgba(17, 11, 23, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1.5px solid var(--gold-line);
+  padding-bottom: max(6px, var(--safe-bottom));
+  scrollbar-width: none;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+}
+.mobile-tabs::-webkit-scrollbar { display: none; }
+.mobile-tab {
+  flex: 1;
+  min-width: 66px;
+  min-height: 56px;
+  padding: 6px 3px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: none;
+  border: 0;
+  color: var(--dimmer);
+  font: 600 11px/1.2 var(--font-h);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .15s, background .15s;
+}
+.mobile-tab .tab-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: inherit;
+  transition: transform .18s ease;
+}
+.mobile-tab .dot {
   display: none;
 }
-@media (max-width: 1023px) {
-  .desktop-nav { display: none; }
-  .mobile-tabs {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 85;
-    display: flex;
-    overflow-x: auto;
-    background: rgba(17, 11, 23, 0.96);
-    backdrop-filter: blur(16px);
-    border-top: 1.5px solid var(--gold-line);
-    padding-bottom: var(--safe-bottom);
-    scrollbar-width: none;
-    box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
-  }
-  .mobile-tabs::-webkit-scrollbar { display: none; }
-  .mobile-tab {
-    flex: 1;
-    min-width: 76px;
-    min-height: 60px;
-    padding: 8px 4px 6px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    background: none;
-    border: 0;
-    color: var(--dimmer);
-    font: 600 12.5px/1.2 var(--font-h);
-    cursor: pointer;
-    white-space: nowrap;
-    transition: color .15s, background .15s;
-  }
-  .mobile-tab .dot {
-    width: 5px; height: 5px; transform: rotate(45deg); background: currentColor; opacity: .5;
-  }
-  .mobile-tab:hover { color: var(--paper); }
-  .mobile-tab.is-active, .mobile-tab[aria-current="page"] {
-    color: var(--red-text); font-weight: 700;
-  }
-  .mobile-tab.is-active .dot {
-    opacity: 1; transform: rotate(45deg) scale(1.3); background: var(--red-text);
-  }
-  .app-main { padding-bottom: 74px; }
+.mobile-tab:hover { color: var(--paper); }
+.mobile-tab.is-active, .mobile-tab[aria-current="page"] {
+  color: var(--gold-ink);
+  font-weight: 700;
+}
+.mobile-tab.is-active .tab-icon {
+  color: var(--gold);
+  transform: scale(1.12);
 }
 
 /* ── Primitives: Buttons, Badges, Ornaments ── */
